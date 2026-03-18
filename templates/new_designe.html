@@ -1,0 +1,635 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sarkari Shooting | Cinematography &amp; Photography</title>
+  <link rel="icon" type="image/png" href="{% static 'logo.png' %}">
+  <link rel="stylesheet" href="{% static 'new_designe_styles.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Preloader -->
+  <div class="ss-preloader" id="ssPreloader">
+    <div class="preloader-spinner"></div>
+    <span class="preloader-brand">Sarkari <span class="brand-red">Shooting</span></span>
+  </div>
+
+  <!-- Navigation -->
+  <header class="ss-navigation" id="ssNav">
+    <div class="nav-wrap">
+      <a href="{% url 'new_designe' %}" class="nav-brand">
+        <img src="{% static 'logo.png' %}" alt="Sarkari Shooting Logo">
+      </a>
+      <nav class="nav-menu" id="navMenu">
+        <a href="#services-section">Services</a>
+        <a href="#portfolio-section">Portfolio</a>
+        <a href="#process-section">Process</a>
+        <a href="#testimonials-section">Reviews</a>
+        <a href="#contact-section">Contact</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <a href="{% url 'contact' %}" class="nav-enquire-btn">Get In Touch</a>
+      </nav>
+      <button class="hamburger-btn" id="ssBurger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Overlay Menu -->
+  <div class="mobile-menu-overlay" id="ssMobileMenu">
+    <ul class="mobile-menu-list">
+      <li><a href="#services-section">Services</a></li>
+      <li><a href="#portfolio-section">Portfolio</a></li>
+      <li><a href="#process-section">Process</a></li>
+      <li><a href="#testimonials-section">Reviews</a></li>
+      <li><a href="#contact-section">Contact</a></li>
+      <li><a href="{% url 'contact' %}" class="nav-enquire-btn">Get In Touch</a></li>
+      <li>
+        <button class="theme-toggle" id="themeToggleMobile" aria-label="Toggle dark/light mode" style="margin: 0.5rem auto 0;">
+          <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Hero Slideshow -->
+  <section class="ss-hero" id="heroSection">
+    <div class="hero-slide-container">
+      <div class="hero-frame is-active" data-idx="0">
+        <img src="https://images.unsplash.com/photo-1505932794465-147d1f1b2c97?w=1920&q=80" alt="Cinematic wedding shoot" loading="eager">
+        <div class="hero-text-block">
+          <span class="hero-location">Udaipur, Rajasthan</span>
+          <span class="hero-date">February 2026</span>
+          <h2 class="hero-title">Royal Wedding Film</h2>
+          <p class="hero-desc">A grand celebration in the City of Lakes, captured through our cinematic lens with breathtaking aerial shots and intimate moments.</p>
+          <a href="#portfolio-section" class="hero-play-link">
+            <svg viewBox="0 0 64 64" width="60" height="60"><circle cx="32" cy="32" r="30" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="26,20 26,44 46,32" fill="currentColor"/></svg>
+            <span>View Portfolio</span>
+          </a>
+        </div>
+      </div>
+      <div class="hero-frame" data-idx="1">
+        <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1920&q=80" alt="Pre-wedding photography" loading="lazy">
+        <div class="hero-text-block">
+          <span class="hero-location">Goa, India</span>
+          <span class="hero-date">January 2026</span>
+          <h2 class="hero-title">Pre-Wedding Magic</h2>
+          <p class="hero-desc">Sun-kissed beaches and golden hour light — crafting pre-wedding stories that feel like cinema.</p>
+          <a href="#portfolio-section" class="hero-play-link">
+            <svg viewBox="0 0 64 64" width="60" height="60"><circle cx="32" cy="32" r="30" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="26,20 26,44 46,32" fill="currentColor"/></svg>
+            <span>View Portfolio</span>
+          </a>
+        </div>
+      </div>
+      <div class="hero-frame" data-idx="2">
+        <img src="https://images.unsplash.com/photo-1520390138845-fd2d229dd553?w=1920&q=80" alt="Corporate event filming" loading="lazy">
+        <div class="hero-text-block">
+          <span class="hero-location">Mumbai, India</span>
+          <span class="hero-date">March 2026</span>
+          <h2 class="hero-title">Corporate Brilliance</h2>
+          <p class="hero-desc">Professional event coverage that elevates your brand with polished visuals and compelling storytelling.</p>
+          <a href="#portfolio-section" class="hero-play-link">
+            <svg viewBox="0 0 64 64" width="60" height="60"><circle cx="32" cy="32" r="30" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="26,20 26,44 46,32" fill="currentColor"/></svg>
+            <span>View Portfolio</span>
+          </a>
+        </div>
+      </div>
+      <div class="hero-frame" data-idx="3">
+        <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1920&q=80" alt="Music video production" loading="lazy">
+        <div class="hero-text-block">
+          <span class="hero-location">Jaipur, Rajasthan</span>
+          <span class="hero-date">December 2025</span>
+          <h2 class="hero-title">Music Video Craft</h2>
+          <p class="hero-desc">Bringing musical visions to life with vibrant cinematography, dynamic storytelling, and creative direction.</p>
+          <a href="#portfolio-section" class="hero-play-link">
+            <svg viewBox="0 0 64 64" width="60" height="60"><circle cx="32" cy="32" r="30" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="26,20 26,44 46,32" fill="currentColor"/></svg>
+            <span>View Portfolio</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-navigation">
+      <button class="hero-nav-arrow hero-prev-btn" aria-label="Previous slide">&#8592;</button>
+      <div class="hero-pagination" id="heroPagination"></div>
+      <button class="hero-nav-arrow hero-next-btn" aria-label="Next slide">&#8594;</button>
+    </div>
+    <div class="hero-scroll-cue">
+      <span>Scroll</span>
+      <div class="scroll-indicator"></div>
+    </div>
+  </section>
+
+  <!-- Brand Statement -->
+  <section class="ss-brand-statement">
+    <div>
+      <h2 class="brand-headline">Crafting Visual Stories That Last Forever</h2>
+      <p class="brand-tagline">Professional Cinematography &amp; Photography Services</p>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="ss-services" id="services-section">
+    <div class="section-head">
+      <span class="eyebrow-label">What We Offer</span>
+      <h2 class="heading-primary">Our Creative Services</h2>
+    </div>
+    <div class="services-mosaic">
+      <article class="service-tile" data-animate>
+        <div class="tile-icon">
+          <svg viewBox="0 0 48 48" width="48" height="48"><rect x="4" y="10" width="40" height="28" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="24" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="24" r="3" fill="currentColor"/></svg>
+        </div>
+        <span class="tile-tag">Cinematic Films</span>
+        <h3 class="tile-name">Wedding Cinematography</h3>
+        <p class="tile-text">We transform your wedding day into a cinematic masterpiece — every laugh, tear, and dance move captured with artistry and emotion.</p>
+      </article>
+      <article class="service-tile" data-animate>
+        <div class="tile-icon">
+          <svg viewBox="0 0 48 48" width="48" height="48"><path d="M24 4C14 4 6 12 6 22c0 12 18 22 18 22s18-10 18-22C42 12 34 4 24 4z" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="20" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <span class="tile-tag">Romantic Storytelling</span>
+        <h3 class="tile-name">Pre-Wedding Shoots</h3>
+        <p class="tile-text">Stunning location shoots that celebrate your love story — from misty mountains to sun-kissed beaches, we create timeless memories.</p>
+      </article>
+      <article class="service-tile" data-animate>
+        <div class="tile-icon">
+          <svg viewBox="0 0 48 48" width="48" height="48"><path d="M8 38V14l16-8 16 8v24" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="18" y="24" width="12" height="14" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="24" y1="24" x2="24" y2="38" stroke="currentColor" stroke-width="1"/></svg>
+        </div>
+        <span class="tile-tag">Complete Coverage</span>
+        <h3 class="tile-name">Event Photography</h3>
+        <p class="tile-text">Corporate launches, concerts, festivals, or private celebrations — we deliver professional coverage that tells the complete story.</p>
+      </article>
+      <article class="service-tile" data-animate>
+        <div class="tile-icon">
+          <svg viewBox="0 0 48 48" width="48" height="48"><rect x="6" y="8" width="36" height="32" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="6" y1="14" x2="42" y2="14" stroke="currentColor" stroke-width="1"/><circle cx="10" cy="11" r="1.5" fill="currentColor"/><circle cx="16" cy="11" r="1.5" fill="currentColor"/><path d="M14 26h20M14 32h14" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <span class="tile-tag">Brand Storytelling</span>
+        <h3 class="tile-name">Corporate Films</h3>
+        <p class="tile-text">Elevate your brand with polished corporate videos, documentaries, and promotional content that resonates with your audience.</p>
+      </article>
+      <article class="service-tile" data-animate>
+        <div class="tile-icon">
+          <svg viewBox="0 0 48 48" width="48" height="48"><circle cx="18" cy="30" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="34" cy="26" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M25 30V10M39 26V8" stroke="currentColor" stroke-width="1.5"/><path d="M25 10l14-2" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <span class="tile-tag">Visual Music</span>
+        <h3 class="tile-name">Music Videos</h3>
+        <p class="tile-text">Dynamic music video production with creative direction, vibrant colour grading, and storytelling that matches the rhythm of your tracks.</p>
+      </article>
+      <article class="service-tile" data-animate>
+        <div class="tile-icon">
+          <svg viewBox="0 0 48 48" width="48" height="48"><rect x="8" y="12" width="32" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><polygon points="20,18 20,30 32,24" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M38 20l6-4v16l-6-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <span class="tile-tag">Creative Expression</span>
+        <h3 class="tile-name">Short Films</h3>
+        <p class="tile-text">From concept to screen — we produce compelling short films, ads, and creative content with professional production value.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Portfolio Gallery -->
+  <section class="ss-portfolio" id="portfolio-section">
+    <div class="section-head">
+      <span class="eyebrow-label">Our Work</span>
+      <h2 class="heading-primary">Featured Portfolio</h2>
+    </div>
+    <div class="filter-strip">
+      <button class="filter-chip is-selected" data-filter="weddings">Weddings</button>
+      <button class="filter-chip" data-filter="prewedding">Pre-Wedding</button>
+      <button class="filter-chip" data-filter="events">Events</button>
+      <button class="filter-chip" data-filter="corporate">Corporate</button>
+      <button class="filter-chip" data-filter="musicvids">Music Videos</button>
+    </div>
+    <div id="portfolioGrid">
+      <!-- Weddings -->
+      <div class="gallery-panel is-shown" data-gallery="weddings">
+        <a href="#" class="portfolio-item" data-animate>
+          <div class="portfolio-thumb">
+            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80" alt="Rahul & Priya Wedding" loading="lazy">
+            <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+          </div>
+          <div class="portfolio-caption">
+            <h3>Rahul &amp; Priya</h3>
+            <span class="portfolio-meta">Dec 2025 &middot; Udaipur</span>
+          </div>
+        </a>
+        <a href="#" class="portfolio-item" data-animate>
+          <div class="portfolio-thumb">
+            <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=600&q=80" alt="Arjun & Meera Wedding" loading="lazy">
+            <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+          </div>
+          <div class="portfolio-caption">
+            <h3>Arjun &amp; Meera</h3>
+            <span class="portfolio-meta">Nov 2025 &middot; Jaipur</span>
+          </div>
+        </a>
+        <a href="#" class="portfolio-item" data-animate>
+          <div class="portfolio-thumb">
+            <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&q=80" alt="Vikram & Ananya Wedding" loading="lazy">
+            <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+          </div>
+          <div class="portfolio-caption">
+            <h3>Vikram &amp; Ananya</h3>
+            <span class="portfolio-meta">Oct 2025 &middot; Goa</span>
+          </div>
+        </a>
+        <a href="#" class="portfolio-item" data-animate>
+          <div class="portfolio-thumb">
+            <img src="https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=600&q=80" alt="Karan & Nisha Wedding" loading="lazy">
+            <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+          </div>
+          <div class="portfolio-caption">
+            <h3>Karan &amp; Nisha</h3>
+            <span class="portfolio-meta">Sep 2025 &middot; Mumbai</span>
+          </div>
+        </a>
+        <a href="#" class="portfolio-item" data-animate>
+          <div class="portfolio-thumb">
+            <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&q=80" alt="Amit & Sneha Wedding" loading="lazy">
+            <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+          </div>
+          <div class="portfolio-caption">
+            <h3>Amit &amp; Sneha</h3>
+            <span class="portfolio-meta">Aug 2025 &middot; Delhi</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Pre-Wedding -->
+      <div class="gallery-panel" data-gallery="prewedding">
+        <a href="#" class="portfolio-item" data-animate>
+          <div class="portfolio-thumb">
+            <img src="https://images.unsplash.com/photo-1529634597503-139d3726fed5?w=600&q=80" alt="Pre-wedding in Mountains" loading="lazy">
+            <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+          </div>
+          <div class="portfolio-caption">
+            <h3>Rishi &amp; Kavya</h3>
+            <span class="portfolio-meta">Jan 2026 &middot; Manali</span>
+          </div>
+        </a>
+        <a href="#" class="portfolio-item" data-animate>
+          <div class="portfolio-thumb">
+            <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600&q=80" alt="Pre-wedding Beach" loading="lazy">
+            <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+          </div>
+          <div class="portfolio-caption">
+            <h3>Siddharth &amp; Riya</h3>
+            <span class="portfolio-meta">Dec 2025 &middot; Goa</span>
+          </div>
+        </a>
+        <a href="#" class="portfolio-item" data-animate>
+          <div class="portfolio-thumb">
+            <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&q=80" alt="Pre-wedding Garden" loading="lazy">
+            <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+          </div>
+          <div class="portfolio-caption">
+            <h3>Rohan &amp; Pooja</h3>
+            <span class="portfolio-meta">Nov 2025 &middot; Shimla</span>
+          </div>
+        </a>
+        <a href="#" class="portfolio-item" data-animate>
+          <div class="portfolio-thumb">
+            <img src="https://images.unsplash.com/photo-1460978812857-470ed1c77af0?w=600&q=80" alt="Pre-wedding Heritage" loading="lazy">
+            <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+          </div>
+          <div class="portfolio-caption">
+            <h3>Dev &amp; Aisha</h3>
+            <span class="portfolio-meta">Oct 2025 &middot; Jodhpur</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Events -->
+      <div class="gallery-panel" data-gallery="events">
+        <a href="#" class="portfolio-item" data-animate>
+          <div class="portfolio-thumb">
+            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80" alt="Corporate Event" loading="lazy">
+            <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+          </div>
+          <div class="portfolio-caption">
+            <h3>Tech Summit 2025</h3>
+            <span class="portfolio-meta">Nov 2025 &middot; Bangalore</span>
+          </div>
+        </a>
+        <a href="#" class="portfolio-item" data-animate>
+          <div class="portfolio-thumb">
+            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&q=80" alt="Cultural Festival" loading="lazy">
+            <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+          </div>
+          <div class="portfolio-caption">
+            <h3>Cultural Fest</h3>
+            <span class="portfolio-meta">Oct 2025 &middot; Jaipur</span>
+          </div>
+        </a>
+        <a href="#" class="portfolio-item" data-animate>
+          <div class="portfolio-thumb">
+            <img src="https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=600&q=80" alt="Birthday Celebration" loading="lazy">
+            <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+          </div>
+          <div class="portfolio-caption">
+            <h3>Grand Birthday Bash</h3>
+            <span class="portfolio-meta">Sep 2025 &middot; Delhi</span>
+          </div>
+        </a>
+        <a href="#" class="portfolio-item" data-animate>
+          <div class="portfolio-thumb">
+            <img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=600&q=80" alt="Concert" loading="lazy">
+            <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+          </div>
+          <div class="portfolio-caption">
+            <h3>Live Concert Night</h3>
+            <span class="portfolio-meta">Aug 2025 &middot; Mumbai</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Corporate -->
+      <div class="gallery-panel" data-gallery="corporate">
+        <a href="#" class="portfolio-item" data-animate>
+          <div class="portfolio-thumb">
+            <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=600&q=80" alt="Product Launch" loading="lazy">
+            <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+          </div>
+          <div class="portfolio-caption">
+            <h3>Product Launch Film</h3>
+            <span class="portfolio-meta">Feb 2026 &middot; Mumbai</span>
+          </div>
+        </a>
+        <a href="#" class="portfolio-item" data-animate>
+          <div class="portfolio-thumb">
+            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=600&q=80" alt="Brand Documentary" loading="lazy">
+            <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+          </div>
+          <div class="portfolio-caption">
+            <h3>Brand Documentary</h3>
+            <span class="portfolio-meta">Jan 2026 &middot; Pune</span>
+          </div>
+        </a>
+        <a href="#" class="portfolio-item" data-animate>
+          <div class="portfolio-thumb">
+            <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&q=80" alt="Conference Coverage" loading="lazy">
+            <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+          </div>
+          <div class="portfolio-caption">
+            <h3>Annual Conference</h3>
+            <span class="portfolio-meta">Dec 2025 &middot; Hyderabad</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Music Videos -->
+      <div class="gallery-panel" data-gallery="musicvids">
+        <a href="#" class="portfolio-item" data-animate>
+          <div class="portfolio-thumb">
+            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&q=80" alt="Music video production" loading="lazy">
+            <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+          </div>
+          <div class="portfolio-caption">
+            <h3>Dil Ki Dhun</h3>
+            <span class="portfolio-meta">Mar 2026 &middot; Mumbai</span>
+          </div>
+        </a>
+        <a href="#" class="portfolio-item" data-animate>
+          <div class="portfolio-thumb">
+            <img src="https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=600&q=80" alt="Album shoot" loading="lazy">
+            <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+          </div>
+          <div class="portfolio-caption">
+            <h3>Raatein</h3>
+            <span class="portfolio-meta">Feb 2026 &middot; Jaipur</span>
+          </div>
+        </a>
+        <a href="#" class="portfolio-item" data-animate>
+          <div class="portfolio-thumb">
+            <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=600&q=80" alt="Live performance" loading="lazy">
+            <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+          </div>
+          <div class="portfolio-caption">
+            <h3>Safar</h3>
+            <span class="portfolio-meta">Jan 2026 &middot; Delhi</span>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="gallery-view-all">
+      <a href="#" class="outline-btn">View All Projects</a>
+    </div>
+  </section>
+
+  <!-- Quote Strip -->
+  <section class="ss-quote-strip">
+    <blockquote>
+      <p>A photograph is a secret about a secret. The more it tells you, the less you know.</p>
+      <cite>&mdash; Sarkari Shooting</cite>
+    </blockquote>
+  </section>
+
+  <!-- Our Process -->
+  <section class="ss-process" id="process-section">
+    <div class="section-head">
+      <span class="eyebrow-label">How We Work</span>
+      <h2 class="heading-primary">Our Creative Process</h2>
+    </div>
+    <div class="process-timeline">
+      <div class="process-step" data-animate>
+        <div class="step-number">01</div>
+        <h3 class="step-title">Consultation</h3>
+        <p class="step-desc">We begin with an in-depth conversation to understand your vision, style preferences, and the story you want to tell.</p>
+      </div>
+      <div class="process-step" data-animate>
+        <div class="step-number">02</div>
+        <h3 class="step-title">Planning</h3>
+        <p class="step-desc">Our team scouts locations, designs mood boards, and creates a detailed production plan tailored to your project.</p>
+      </div>
+      <div class="process-step" data-animate>
+        <div class="step-number">03</div>
+        <h3 class="step-title">Production</h3>
+        <p class="step-desc">On shoot day, our experienced crew captures every moment with state-of-the-art cameras, drones, and lighting equipment.</p>
+      </div>
+      <div class="process-step" data-animate>
+        <div class="step-number">04</div>
+        <h3 class="step-title">Delivery</h3>
+        <p class="step-desc">Expert colour grading, sound design, and cinematic editing bring your story to life — delivered in stunning quality.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="ss-testimonials" id="testimonials-section">
+    <div class="section-head">
+      <span class="eyebrow-label">Client Love</span>
+      <h2 class="heading-primary">What Our Clients Say</h2>
+    </div>
+    <div class="testimonial-viewport">
+      <div class="testimonial-ribbon" id="testimonialRibbon">
+        <div class="review-card">
+          <p class="review-text">&ldquo;Sarkari Shooting captured our wedding so beautifully that we relive the emotions every time we watch the film. Truly cinematic!&rdquo;</p>
+          <div class="review-author">
+            <strong>Priya &amp; Rahul</strong>
+            <span>Wedding Client &middot; Udaipur</span>
+          </div>
+        </div>
+        <div class="review-card">
+          <p class="review-text">&ldquo;The pre-wedding shoot exceeded all our expectations. Every frame looks like it belongs in a magazine. Highly recommended!&rdquo;</p>
+          <div class="review-author">
+            <strong>Ananya Sharma</strong>
+            <span>Pre-Wedding Client &middot; Manali</span>
+          </div>
+        </div>
+        <div class="review-card">
+          <p class="review-text">&ldquo;Professional, creative, and incredibly talented. They turned our corporate event into a visual masterpiece.&rdquo;</p>
+          <div class="review-author">
+            <strong>Rajesh Gupta</strong>
+            <span>Corporate Client &middot; Mumbai</span>
+          </div>
+        </div>
+        <div class="review-card">
+          <p class="review-text">&ldquo;From the first meeting to final delivery, the team was exceptional. Our music video looks like a Bollywood production!&rdquo;</p>
+          <div class="review-author">
+            <strong>Neha Kapoor</strong>
+            <span>Music Video Client &middot; Delhi</span>
+          </div>
+        </div>
+        <div class="review-card">
+          <p class="review-text">&ldquo;We cried watching our wedding film for the first time. They captured moments we didn&rsquo;t even know existed. Pure magic!&rdquo;</p>
+          <div class="review-author">
+            <strong>Meera &amp; Karan</strong>
+            <span>Wedding Client &middot; Jaipur</span>
+          </div>
+        </div>
+        <div class="review-card">
+          <p class="review-text">&ldquo;The attention to detail is unmatched. Every shot, every angle, every edit was perfect. Worth every penny!&rdquo;</p>
+          <div class="review-author">
+            <strong>Vikram Singh</strong>
+            <span>Event Client &middot; Goa</span>
+          </div>
+        </div>
+        <div class="review-card">
+          <p class="review-text">&ldquo;I&rsquo;ve worked with many videographers, but Sarkari Shooting is on another level. They truly understand storytelling.&rdquo;</p>
+          <div class="review-author">
+            <strong>Aditya Verma</strong>
+            <span>Corporate Client &middot; Bangalore</span>
+          </div>
+        </div>
+        <div class="review-card">
+          <p class="review-text">&ldquo;Our families couldn&rsquo;t stop praising the wedding video. It was like watching a movie about our own love story!&rdquo;</p>
+          <div class="review-author">
+            <strong>Sneha &amp; Amit</strong>
+            <span>Wedding Client &middot; Delhi</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-arrows">
+      <button class="slide-arrow" id="testimPrev" aria-label="Previous review">&#8592;</button>
+      <button class="slide-arrow" id="testimNext" aria-label="Next review">&#8594;</button>
+    </div>
+  </section>
+
+  <!-- Stats Counter -->
+  <section class="ss-stats">
+    <div class="stats-row">
+      <div class="stat-cell" data-animate>
+        <div class="stat-number" data-count="500" data-suffix="+">0</div>
+        <div class="stat-label">Projects Completed</div>
+      </div>
+      <div class="stat-cell" data-animate>
+        <div class="stat-number" data-count="350" data-suffix="+">0</div>
+        <div class="stat-label">Happy Clients</div>
+      </div>
+      <div class="stat-cell" data-animate>
+        <div class="stat-number" data-count="8" data-suffix="+">0</div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div class="stat-cell" data-animate>
+        <div class="stat-number" data-count="25" data-suffix="+">0</div>
+        <div class="stat-label">Cities Covered</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Parallax -->
+  <section class="ss-cta-banner">
+    <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80" alt="Studio setup" loading="lazy">
+    <div class="cta-content">
+      <h2>Ready to Create Something Beautiful?</h2>
+      <a href="{% url 'contact' %}" class="solid-btn">Book a Session</a>
+    </div>
+  </section>
+
+  <!-- Quick Contact -->
+  <section class="ss-contact-bar" id="contact-section">
+    <div class="contact-wrapper">
+      <div class="contact-info-block">
+        <span class="eyebrow-label">Reach Out</span>
+        <h2 class="heading-primary">Let's Work Together</h2>
+        <div class="info-piece">
+          <h4>Phone / WhatsApp</h4>
+          <p><a href="https://wa.me/919XXXXXXXXX">+91 9XXX XXX XXX</a></p>
+        </div>
+        <div class="info-piece">
+          <h4>Studio Address</h4>
+          <p>Sarkari Shooting Studio, Near City Palace, Jaipur, Rajasthan 302001</p>
+        </div>
+        <div class="info-piece">
+          <h4>Email</h4>
+          <p><a href="mailto:info@sarkarishooting.com">info@sarkarishooting.com</a></p>
+        </div>
+        <div class="info-piece">
+          <h4>Working Hours</h4>
+          <p>Mon &ndash; Sat: 10:00 AM &ndash; 8:00 PM</p>
+        </div>
+      </div>
+      <form class="enquiry-form" id="enquiryForm">
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Email Address" required>
+        <input type="tel" placeholder="Phone Number">
+        <input type="text" placeholder="Event Date">
+        <input type="text" placeholder="Event Location">
+        <textarea rows="4" placeholder="Tell us about your project..."></textarea>
+        <button type="submit" class="solid-btn">Send Enquiry</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="ss-footer">
+    <div class="footer-content">
+      <a href="{% url 'new_designe' %}" class="footer-brand">
+        <img src="{% static 'logo.png' %}" alt="Sarkari Shooting">
+      </a>
+      <nav class="footer-nav">
+        <a href="#services-section">Services</a>
+        <a href="#portfolio-section">Portfolio</a>
+        <a href="#process-section">Process</a>
+        <a href="#testimonials-section">Reviews</a>
+        <a href="{% url 'contact' %}">Contact</a>
+      </nav>
+      <div class="footer-social">
+        <a href="https://wa.me/919XXXXXXXXX" target="_blank" rel="noopener" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+        <a href="mailto:info@sarkarishooting.com" aria-label="Email">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 4l10 8 10-8"/></svg>
+        </a>
+        <a href="https://instagram.com/sarkarishooting" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        </a>
+        <a href="https://facebook.com/sarkarishooting" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+      </div>
+      <p class="footer-copyright">&copy; 2026 &mdash; Sarkari Shooting Cinematography. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="{% static 'new_designe_script.js' %}"></script>
+</body>
+</html>
