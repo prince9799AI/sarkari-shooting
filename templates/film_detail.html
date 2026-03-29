@@ -1,0 +1,199 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ film.title }} | {{ site.site_name|default:"Sarkari Shooting" }}</title>
+  <meta name="description" content="{{ film.description|truncatewords:30|default:film.title }}">
+  <link rel="icon" type="image/png" href="{% if site.favicon %}{{ site.favicon.url }}{% else %}{% static 'logo.png' %}{% endif %}">
+  <link rel="stylesheet" href="{% static 'new_designe_styles.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="ss-navigation is-sticky" id="ssNav">
+    <div class="nav-wrap">
+      <a href="{% url 'new_designe' %}" class="nav-brand">
+        <img src="{% if site.logo %}{{ site.logo.url }}{% else %}{% static 'logo.png' %}{% endif %}" alt="{{ site.site_name|default:'Sarkari Shooting' }} Logo">
+      </a>
+      <nav class="nav-menu" id="navMenu">
+        <a href="{% url 'new_designe' %}#services-section">Services</a>
+        <a href="{% url 'new_designe' %}#portfolio-section">Portfolio</a>
+        <a href="{% url 'new_designe' %}#process-section">Process</a>
+        <a href="{% url 'new_designe' %}#testimonials-section">Reviews</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <a href="{% url 'contact' %}" class="nav-enquire-btn">Get In Touch</a>
+      </nav>
+      <button class="hamburger-btn" id="ssBurger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Overlay Menu -->
+  <div class="mobile-menu-overlay" id="ssMobileMenu">
+    <ul class="mobile-menu-list">
+      <li><a href="{% url 'new_designe' %}#services-section">Services</a></li>
+      <li><a href="{% url 'new_designe' %}#portfolio-section">Portfolio</a></li>
+      <li><a href="{% url 'new_designe' %}#process-section">Process</a></li>
+      <li><a href="{% url 'new_designe' %}#testimonials-section">Reviews</a></li>
+      <li><a href="{% url 'contact' %}" class="nav-enquire-btn">Get In Touch</a></li>
+      <li>
+        <button class="theme-toggle" id="themeToggleMobile" aria-label="Toggle dark/light mode" style="margin: 0.5rem auto 0;">
+          <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Film Hero -->
+  <section class="film-hero">
+    <a href="{% url 'new_designe' %}#portfolio-section" class="film-back-link">
+      <span class="back-arrow">&#8592;</span>
+      <span>Go Back</span>
+    </a>
+    <div class="film-hero-media">
+      {% if film.image %}
+      <img src="{{ film.image.url }}" alt="{{ film.title }}" loading="eager">
+      {% elif film.gallery_images.all %}
+      <img src="{{ film.gallery_images.all.0.image.url }}" alt="{{ film.title }}" loading="eager">
+      {% else %}
+      <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=80" alt="{{ film.title }}" loading="eager">
+      {% endif %}
+      <div class="film-hero-overlay"></div>
+    </div>
+    <div class="film-hero-content">
+      <div class="film-action-btns">
+        {% if film.gallery_videos.all %}
+        <a href="#film-videos-section" class="film-btn film-btn-primary">
+          <svg viewBox="0 0 32 32" width="24" height="24"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="14,11 14,21 22,16" fill="currentColor"/></svg>
+          <span>Watch Trailer</span>
+        </a>
+        {% endif %}
+        <a href="{% url 'contact' %}" class="film-btn film-btn-outline">Enquire Now</a>
+      </div>
+      <span class="film-badge">Featured</span>
+      {% if date %}<span class="film-meta-line">{{ date }}</span>{% endif %}
+      {% if location %}<span class="film-meta-line">{{ location }}</span>{% endif %}
+      {% if film.venue %}<span class="film-meta-line">{{ film.venue }}</span>{% endif %}
+      <h1 class="film-title">{{ film.title }}</h1>
+      {% if tags_list %}
+      <div class="film-tags">
+        {% for tag in tags_list %}
+        <span class="film-tag">{{ tag }}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% if film.description %}
+      <p class="film-story">{{ film.description }}</p>
+      {% endif %}
+    </div>
+  </section>
+
+  {% if film.gallery_images.all or film.image %}
+  <section class="film-gallery">
+    <div class="section-head">
+      <span class="eyebrow-label">Behind the Scenes</span>
+      <h2 class="heading-primary">These Are a Few of the Memories We Made</h2>
+    </div>
+    <div class="film-gallery-grid">
+      {% if film.image %}
+      <div class="film-gallery-item">
+        <img src="{{ film.image.url }}" alt="{{ film.title }}" loading="lazy">
+      </div>
+      {% endif %}
+      {% for img in film.gallery_images.all %}
+      <div class="film-gallery-item">
+        <img src="{{ img.image.url }}" alt="{% if img.caption %}{{ img.caption }}{% else %}{{ film.title }}{% endif %}" loading="lazy">
+        {% if img.caption %}<span class="film-gallery-caption">{{ img.caption }}</span>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if film.gallery_videos.all %}
+  <section class="film-videos" id="film-videos-section">
+    <div class="section-head">
+      <span class="eyebrow-label">Watch</span>
+      <h2 class="heading-primary">More Videos</h2>
+    </div>
+    <div class="film-videos-grid">
+      {% for v in film.gallery_videos.all %}
+      <div class="film-video-item">
+        <video controls preload="metadata" poster="">
+          <source src="{{ v.video.url }}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        {% if v.caption %}<p class="film-video-caption">{{ v.caption }}</p>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if film.testimonial_text %}
+  <section class="film-testimonial">
+    <div class="film-testimonial-inner">
+      <blockquote>
+        <p>&ldquo;{{ film.testimonial_text }}&rdquo;</p>
+        {% if film.testimonial_author %}
+        <cite>&mdash; {{ film.testimonial_author }}</cite>
+        {% endif %}
+      </blockquote>
+    </div>
+  </section>
+  {% endif %}
+
+  {% if related %}
+  <section class="film-related">
+    <div class="section-head">
+      <span class="eyebrow-label">You May Also Like</span>
+      <h2 class="heading-primary">More Films</h2>
+    </div>
+    <div class="film-related-grid">
+      {% for item in related %}
+      <a href="{% url 'film_detail' item.pk %}" class="film-related-card" data-animate>
+        <div class="film-related-thumb">
+          <img src="{% if item.image %}{{ item.image.url }}{% else %}https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80{% endif %}" alt="{{ item.title }}" loading="lazy">
+          <div class="film-related-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+        </div>
+        <div class="film-related-info">
+          <h3>{{ item.title }}</h3>
+          <span class="film-related-meta">{{ item.meta }}</span>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    <div class="film-related-cta">
+      <a href="{% url 'new_designe' %}#portfolio-section" class="outline-btn">View All Films</a>
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Footer -->
+  <footer class="ss-footer">
+    <div class="footer-inner">
+      <a href="{% url 'new_designe' %}" class="footer-brand">
+        <img src="{% if site.logo %}{{ site.logo.url }}{% else %}{% static 'logo.png' %}{% endif %}" alt="{{ site.site_name|default:'Sarkari Shooting' }}">
+      </a>
+      <div class="footer-contact">
+        {% if site.phone_whatsapp %}<p><strong>Phone</strong> {{ site.phone_whatsapp }}</p>{% endif %}
+        {% if site.studio_address %}<p><strong>Studio</strong> {{ site.studio_address }}</p>{% endif %}
+        {% if site.email %}<p><strong>Email</strong> {{ site.email }}</p>{% endif %}
+      </div>
+      <p class="footer-copy">{{ site.copyright_text|default:"© 2026 — Sarkari Shooting" }}</p>
+    </div>
+  </footer>
+
+  <script src="{% static 'new_designe_script.js' %}"></script>
+</body>
+</html>

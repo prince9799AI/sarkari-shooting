@@ -220,10 +220,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
   }
 
-  /* ── Contact Form ── */
+  /* ── Contact Form (client-side fallback for forms without server action) ── */
   const enquiryForms = document.querySelectorAll('.enquiry-form, .contact-form-grid');
   enquiryForms.forEach(form => {
     form.addEventListener('submit', e => {
+      if (form.method.toLowerCase() === 'post' && form.action) return;
       e.preventDefault();
       const btn = form.querySelector('.solid-btn');
       if (!btn) return;
