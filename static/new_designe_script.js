@@ -6,6 +6,94 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  /* ── Countdown (ISO date from template) ── */
+  function initCountdown() {
+    const root = document.getElementById('heroCountdown');
+    if (!root) return;
+    const iso = root.dataset.countdownTarget;
+    if (!iso) return;
+
+    const dEl = document.getElementById('cdDays');
+    const hEl = document.getElementById('cdHours');
+    const mEl = document.getElementById('cdMins');
+    const sEl = document.getElementById('cdSecs');
+    if (!dEl || !hEl || !mEl || !sEl) return;
+
+    const targetMs = Date.parse(iso);
+    if (Number.isNaN(targetMs)) return;
+
+    function tick() {
+      let diff = targetMs - Date.now();
+      if (diff <= 0) {
+        dEl.textContent = '00';
+        hEl.textContent = '00';
+        mEl.textContent = '00';
+        sEl.textContent = '00';
+        root.setAttribute('aria-label', 'Event time reached');
+        return;
+      }
+      const secs = Math.floor(diff / 1000);
+      const dd = Math.floor(secs / 86400);
+      const hh = Math.floor((secs % 86400) / 3600);
+      const mm = Math.floor((secs % 3600) / 60);
+      const ss = secs % 60;
+      const pad = (n) => String(n).padStart(2, '0');
+      dEl.textContent = pad(Math.min(dd, 99));
+      hEl.textContent = pad(hh);
+      mEl.textContent = pad(mm);
+      sEl.textContent = pad(ss);
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  }
+
+  initCountdown();
+
+  /* ── Staggered section children ── */
+  document.querySelectorAll('[data-stagger]').forEach((block) => {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const parent = entry.target;
+          parent.classList.add('is-revealed');
+          [...parent.children].forEach((child, i) => {
+            child.style.transitionDelay = `${i * 0.09}s`;
+          });
+          io.unobserve(parent);
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -32px 0px' }
+    );
+    io.observe(block);
+  });
+
+  /* ── Hero title: stagger words on active slide ── */
+  function resetHeroTitlesToPlainText() {
+    document.querySelectorAll('.hero-frame .js-hero-title').forEach((el) => {
+      if (el.dataset.fullText) {
+        el.textContent = el.dataset.fullText;
+      }
+    });
+  }
+
+  function animateActiveHeroTitle() {
+    resetHeroTitlesToPlainText();
+    const active = document.querySelector('.hero-frame.is-active .js-hero-title');
+    if (!active) return;
+    if (!active.dataset.fullText) {
+      active.dataset.fullText = active.textContent.trim();
+    }
+    const words = active.dataset.fullText.split(/\s+/).filter(Boolean);
+    active.innerHTML = words
+      .map(
+        (w, i) =>
+          `<span class="hero-title-word" style="animation-delay:${0.08 + i * 0.11}s">${w}</span>`
+      )
+      .join(' ');
+  }
+
   /* ── Theme Toggle ── */
   function switchTheme() {
     const current = document.documentElement.getAttribute('data-theme');
@@ -78,6 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
       heroFrames[activeIdx].classList.add('is-active');
       pips[activeIdx].classList.add('is-active');
       restartAuto();
+      animateActiveHeroTitle();
     }
 
     function restartAuto() {
@@ -220,18 +309,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
   }
 
-  /* ── Contact Form (client-side fallback for forms without server action) ── */
+  /* ── Contact Form: loading state on POST + client fallback ── */
   const enquiryForms = document.querySelectorAll('.enquiry-form, .contact-form-grid');
-  enquiryForms.forEach(form => {
-    form.addEventListener('submit', e => {
-      if (form.method.toLowerCase() === 'post' && form.action) return;
+  enquiryForms.forEach((form) => {
+    form.addEventListener('submit', (e) => {
+      const btn = form.querySelector('.solid-btn--submit') || form.querySelector('.solid-btn');
+      if (form.method.toLowerCase() === 'post' && form.action) {
+        if (btn) btn.classList.add('is-loading');
+        return;
+      }
       e.preventDefault();
-      const btn = form.querySelector('.solid-btn');
       if (!btn) return;
-      const orig = btn.textContent;
-      btn.textContent = 'Thank You!';
+      const label = btn.querySelector('.btn-label');
+      const orig = label ? label.textContent : btn.textContent;
+      if (label) label.textContent = 'Thank You!';
+      else btn.textContent = 'Thank You!';
       btn.style.pointerEvents = 'none';
-      setTimeout(() => { btn.textContent = orig; btn.style.pointerEvents = ''; form.reset(); }, 2500);
+      setTimeout(() => {
+        if (label) label.textContent = orig;
+        else btn.textContent = orig;
+        btn.style.pointerEvents = '';
+        form.reset();
+      }, 2500);
     });
   });
 
@@ -242,5 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
     });
   });
+
+  animateActiveHeroTitle();
 
 });
