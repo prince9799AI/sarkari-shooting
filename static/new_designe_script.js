@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
      2. SPLASH / FLASH SCREEN
      ---------------------------------------------------------------
      - Falling petals generated dynamically (no extra DOM in template)
-     - Plays once per session (localStorage flag)
+     - Ring loader only (no spinner fallback)
      - Sequence: rings → monogram → line → name → tagline → cue
      - Exits at ~3.6s with scale-fade
      =============================================================== */
@@ -65,33 +65,17 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   if (splash) {
-    const splashSeen = sessionStorage.getItem('ss-splash-seen');
-    if (splashSeen) {
+    document.body.classList.add('is-splash-active');
+    renderPetals();
+    setTimeout(() => splash.classList.add('is-leaving'), 3500);
+    setTimeout(() => {
       splash.classList.add('is-hidden');
-    } else {
-      document.body.classList.add('is-splash-active');
-      renderPetals();
-      setTimeout(() => splash.classList.add('is-leaving'), 3500);
-      setTimeout(() => {
-        splash.classList.add('is-hidden');
-        document.body.classList.remove('is-splash-active');
-        sessionStorage.setItem('ss-splash-seen', '1');
-      }, 4400);
-    }
+      document.body.classList.remove('is-splash-active');
+    }, 4400);
   }
 
   /* ===============================================================
-     3. PRELOADER (fallback for slow assets)
-     =============================================================== */
-  const loader = document.getElementById('ssPreloader');
-  if (loader) {
-    const hide = () => loader.classList.add('is-hidden');
-    window.addEventListener('load', () => setTimeout(hide, 400));
-    setTimeout(hide, 2800);
-  }
-
-  /* ===============================================================
-     4. SCROLL PROGRESS BAR (top of page)
+     3. SCROLL PROGRESS BAR (top of page)
      =============================================================== */
   const progressBar = document.getElementById('scrollProgress');
   const updateProgress = () => {
