@@ -4,30 +4,70 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="{{ site.site_name|default:'Sarkari Shooting' }} — luxury wedding cinematography and photography. Timeless films, editorial photography, crafted across India.">
-  <meta property="og:title" content="{{ site.site_name|default:'Sarkari Shooting' }} | Cinematography &amp; Photography">
-  <meta property="og:description" content="Cinematic wedding films and photography with an editorial, art-directed approach.">
-  <meta property="og:type" content="website">
+  <meta name="description" content="{{ site.site_name|default:'Sarkari Shooting' }} — luxury cinematography & photography crafting cinematic visual stories.">
   <title>{{ site.site_name|default:"Sarkari Shooting" }} | Cinematography &amp; Photography</title>
+
   <link rel="icon" type="image/png" href="{% if site.favicon %}{{ site.favicon.url }}{% else %}{% static 'logo.png' %}{% endif %}">
-  <link rel="stylesheet" href="{% static 'new_designe_styles.css' %}">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'new_designe_styles.css' %}">
 </head>
 <body>
-  <a class="skip-link" href="#main-content">Skip to main content</a>
 
-  <!-- Preloader -->
-  <div class="ss-preloader" id="ssPreloader">
+  <!-- Scroll Progress Bar (thin gold line at the very top) -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- ────────── Splash / Flash Screen ────────── -->
+  <div class="ss-splash" id="ssSplash" aria-hidden="true">
+    <!-- Floating petals (rendered via JS) -->
+    <div class="splash-petals" id="splashPetals"></div>
+
+    <div class="splash-stage">
+      <!-- Pulsing concentric rings -->
+      <div class="splash-rings" aria-hidden="true">
+        <span class="ring r1"></span>
+        <span class="ring r2"></span>
+        <span class="ring r3"></span>
+        <span class="ring r4"></span>
+      </div>
+
+      <!-- Monogram from initials of the studio name -->
+      <div class="splash-monogram">
+        <span class="mono-letter">S</span>
+        <span class="mono-amp">·</span>
+        <span class="mono-letter">S</span>
+      </div>
+
+      <!-- Drawn gold divider -->
+      <span class="splash-line"></span>
+
+      <!-- Brand name & tagline -->
+      <h1 class="splash-name">{{ site.site_name|default:"Sarkari Shooting" }}</h1>
+      <p class="splash-tagline">Cinematic Storytelling · Est. Heritage</p>
+
+      <!-- Scroll cue -->
+      <div class="splash-cue">
+        <span>Begin the story</span>
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M6 9l6 6 6-6"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ────────── Preloader (fallback) ────────── -->
+  <div class="ss-preloader" id="ssPreloader" aria-hidden="true">
     <div class="preloader-spinner"></div>
     <span class="preloader-brand">{{ site.site_name|default:"Sarkari" }} <span class="brand-red">Shooting</span></span>
   </div>
 
-  <!-- Navigation -->
-  <header class="ss-navigation" id="ssNav" role="banner">
+  <!-- ────────── Navigation ────────── -->
+  <header class="ss-navigation" id="ssNav">
     <div class="nav-wrap">
-      <a href="{% url 'new_designe' %}" class="nav-brand">
+      <a href="{% url 'new_designe' %}" class="nav-brand" aria-label="{{ site.site_name|default:'Sarkari Shooting' }} home">
         <img src="{% if site.logo %}{{ site.logo.url }}{% else %}{% static 'logo.png' %}{% endif %}" alt="{{ site.site_name|default:'Sarkari Shooting' }} Logo">
       </a>
       <nav class="nav-menu" id="navMenu" aria-label="Primary">
@@ -36,20 +76,20 @@
         <a href="#process-section">Process</a>
         <a href="#testimonials-section">Reviews</a>
         <a href="#contact-section">Contact</a>
-        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark/light mode">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
           <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
           <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         </button>
-        <a href="{% url 'contact' %}" class="nav-enquire-btn">Get In Touch</a>
+        <a href="{% url 'contact' %}" class="nav-enquire-btn" data-magnetic>Get In Touch</a>
       </nav>
-      <button class="hamburger-btn" id="ssBurger" aria-label="Toggle menu">
+      <button class="hamburger-btn" id="ssBurger" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
   </header>
 
-  <!-- Mobile Overlay Menu -->
-  <div class="mobile-menu-overlay" id="ssMobileMenu">
+  <!-- ────────── Mobile Overlay Menu ────────── -->
+  <div class="mobile-menu-overlay" id="ssMobileMenu" aria-hidden="true">
     <ul class="mobile-menu-list">
       <li><a href="#services-section">Services</a></li>
       <li><a href="#portfolio-section">Portfolio</a></li>
@@ -58,7 +98,7 @@
       <li><a href="#contact-section">Contact</a></li>
       <li><a href="{% url 'contact' %}" class="nav-enquire-btn">Get In Touch</a></li>
       <li>
-        <button class="theme-toggle theme-toggle--menu" id="themeToggleMobile" type="button" aria-label="Toggle dark/light mode">
+        <button class="theme-toggle" id="themeToggleMobile" aria-label="Toggle dark/light mode" style="margin: 0.5rem auto 0;">
           <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
           <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         </button>
@@ -66,20 +106,20 @@
     </ul>
   </div>
 
-  <main id="main-content">
-  <!-- Hero Slideshow -->
+  <!-- ────────── Hero Slideshow ────────── -->
   <section class="ss-hero" id="heroSection">
     <div class="hero-slide-container">
       {% for slide in hero_slides %}
       <div class="hero-frame {% if forloop.first %}is-active{% endif %}" data-idx="{{ forloop.counter0 }}">
         <img src="{% if slide.image %}{{ slide.image.url }}{% else %}https://images.unsplash.com/photo-1505932794465-147d1f1b2c97?w=1920&q=80{% endif %}" alt="{{ slide.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
         <div class="hero-text-block">
-          <span class="hero-location">{{ slide.location }}</span>
+          <span class="hero-eyebrow"><span class="hero-eyebrow-dash"></span>{{ slide.location }}</span>
           <span class="hero-date">{{ slide.date }}</span>
-          <h2 class="hero-title js-hero-title">{{ slide.title }}</h2>
+          <h2 class="hero-title" data-letter-reveal>{{ slide.title }}</h2>
+          <span class="hero-divider" aria-hidden="true"></span>
           <p class="hero-desc">{{ slide.description }}</p>
-          <a href="#portfolio-section" class="hero-play-link">
-            <svg viewBox="0 0 64 64" width="60" height="60"><circle cx="32" cy="32" r="30" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="26,20 26,44 46,32" fill="currentColor"/></svg>
+          <a href="#portfolio-section" class="hero-play-link" data-magnetic>
+            <svg viewBox="0 0 64 64" width="60" height="60" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="26,20 26,44 46,32" fill="currentColor"/></svg>
             <span>{{ slide.link_text }}</span>
           </a>
         </div>
@@ -88,39 +128,18 @@
       <div class="hero-frame is-active" data-idx="0">
         <img src="https://images.unsplash.com/photo-1505932794465-147d1f1b2c97?w=1920&q=80" alt="Cinematic wedding shoot" loading="eager">
         <div class="hero-text-block">
-          <span class="hero-location">Udaipur, Rajasthan</span>
+          <span class="hero-eyebrow"><span class="hero-eyebrow-dash"></span>Udaipur, Rajasthan</span>
           <span class="hero-date">February 2026</span>
-          <h2 class="hero-title js-hero-title">Royal Wedding Film</h2>
+          <h2 class="hero-title" data-letter-reveal>Royal Wedding Film</h2>
+          <span class="hero-divider" aria-hidden="true"></span>
           <p class="hero-desc">A grand celebration in the City of Lakes, captured through our cinematic lens.</p>
-          <a href="#portfolio-section" class="hero-play-link">
-            <svg viewBox="0 0 64 64" width="60" height="60"><circle cx="32" cy="32" r="30" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="26,20 26,44 46,32" fill="currentColor"/></svg>
+          <a href="#portfolio-section" class="hero-play-link" data-magnetic>
+            <svg viewBox="0 0 64 64" width="60" height="60" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="26,20 26,44 46,32" fill="currentColor"/></svg>
             <span>View Portfolio</span>
           </a>
         </div>
       </div>
       {% endfor %}
-    </div>
-
-    <div class="hero-shared-ui">
-      <p class="hero-countdown-eyebrow">{{ countdown_label }}</p>
-      <div
-        class="hero-countdown"
-        id="heroCountdown"
-        role="timer"
-        aria-live="polite"
-        aria-label="Countdown to featured event"
-        data-countdown-target="{{ countdown_target_iso }}"
-      >
-        <div class="hero-countdown-inner">
-          <div class="cd-seg"><span class="cd-val" id="cdDays">00</span><span class="cd-lbl">Days</span></div>
-          <span class="cd-dot" aria-hidden="true">:</span>
-          <div class="cd-seg"><span class="cd-val" id="cdHours">00</span><span class="cd-lbl">Hours</span></div>
-          <span class="cd-dot" aria-hidden="true">:</span>
-          <div class="cd-seg"><span class="cd-val" id="cdMins">00</span><span class="cd-lbl">Mins</span></div>
-          <span class="cd-dot" aria-hidden="true">:</span>
-          <div class="cd-seg"><span class="cd-val" id="cdSecs">00</span><span class="cd-lbl">Secs</span></div>
-        </div>
-      </div>
     </div>
 
     {% if hero_slides|length > 1 %}
@@ -130,15 +149,21 @@
       <button class="hero-nav-arrow hero-next-btn" aria-label="Next slide">&#8594;</button>
     </div>
     {% endif %}
-    <div class="hero-scroll-cue">
+
+    <div class="hero-scroll-cue" aria-hidden="true">
       <span>Scroll</span>
       <div class="scroll-indicator"></div>
     </div>
   </section>
 
-  <!-- Brand Statement -->
-  <section class="ss-brand-statement" data-animate>
+  <!-- ────────── Brand Statement ────────── -->
+  <section class="ss-brand-statement" data-reveal="fade-up">
     <div class="brand-statement-inner">
+      <span class="brand-ornament" aria-hidden="true">
+        <span class="brand-orn-line"></span>
+        <span class="brand-orn-diamond"></span>
+        <span class="brand-orn-line"></span>
+      </span>
       {% with brand=brand_statements|first %}
       {% if brand %}
       <h2 class="brand-headline">{{ brand.headline }}</h2>
@@ -151,38 +176,42 @@
     </div>
   </section>
 
-  <!-- Services -->
+  <!-- ────────── Services ────────── -->
   <section class="ss-services" id="services-section">
-    <div class="section-head">
+    <div class="section-head" data-reveal="fade-up">
       <span class="eyebrow-label">{{ section_services.0 }}</span>
       <h2 class="heading-primary">{{ section_services.1 }}</h2>
+      <span class="head-ornament" aria-hidden="true"></span>
     </div>
-    {% if services %}
-    <div class="services-mosaic" data-stagger>
+    <div class="services-mosaic" data-reveal="stagger" data-stagger="0.12">
       {% for service in services %}
-      <article class="service-tile" data-animate>
+      <article class="service-tile" data-animate data-reveal-child>
         <div class="tile-icon">
           {% if service.icon %}
-          <img class="tile-icon-img" src="{{ service.icon.url }}" alt="{{ service.name }}" width="48" height="48">
+          <img src="{{ service.icon.url }}" alt="{{ service.name }}" width="48" height="48" style="object-fit: contain;">
           {% else %}
-          <svg viewBox="0 0 48 48" width="48" height="48"><rect x="4" y="10" width="40" height="28" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="24" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="24" r="3" fill="currentColor"/></svg>
+          <svg viewBox="0 0 48 48" width="48" height="48" aria-hidden="true"><rect x="4" y="10" width="40" height="28" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="24" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="24" r="3" fill="currentColor"/></svg>
           {% endif %}
         </div>
         <span class="tile-tag">{{ service.tag }}</span>
         <h3 class="tile-name">{{ service.name }}</h3>
         <p class="tile-text">{{ service.description }}</p>
+        <span class="tile-corner" aria-hidden="true"></span>
       </article>
       {% endfor %}
     </div>
-    {% endif %}
   </section>
+
+  <!-- ────────── Portfolio Gallery ────────── -->
   <section class="ss-portfolio" id="portfolio-section">
-    <div class="section-head">
+    <div class="section-head" data-reveal="fade-up">
       <span class="eyebrow-label">{{ section_portfolio.0 }}</span>
       <h2 class="heading-primary">{{ section_portfolio.1 }}</h2>
+      <span class="head-ornament" aria-hidden="true"></span>
     </div>
+
     {% if portfolio_categories %}
-    <div class="filter-strip">
+    <div class="filter-strip" data-reveal="fade-up" data-delay="0.15">
       {% for cat in portfolio_categories %}
       <button class="filter-chip {% if forloop.first %}is-selected{% endif %}" data-filter="{{ cat.slug }}">{{ cat.name }}</button>
       {% endfor %}
@@ -191,10 +220,11 @@
       {% for cat in portfolio_categories %}
       <div class="gallery-panel {% if forloop.first %}is-shown{% endif %}" data-gallery="{{ cat.slug }}">
         {% for item in cat.items.all %}
-        <a href="{% url 'film_detail' item.pk %}" class="portfolio-item" data-animate>
+        <a href="{% url 'film_detail' item.pk %}" class="portfolio-item" data-animate data-reveal="fade-up" data-delay="{{ forloop.counter0|stringformat:'s' }}00">
           <div class="portfolio-thumb">
             <img src="{% if item.image %}{{ item.image.url }}{% else %}https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80{% endif %}" alt="{{ item.title }}" loading="lazy">
             <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+            <span class="portfolio-shutter" aria-hidden="true"></span>
           </div>
           <div class="portfolio-caption">
             <h3>{{ item.title }}</h3>
@@ -206,14 +236,16 @@
       {% endfor %}
     </div>
     {% endif %}
-    <div class="gallery-view-all">
-      <a href="{% url 'contact' %}" class="outline-btn">View All Projects</a>
+
+    <div class="gallery-view-all" data-reveal="fade-up">
+      <a href="{% url 'contact' %}" class="outline-btn" data-magnetic>View All Projects</a>
     </div>
   </section>
 
-  <!-- Quote Strip -->
-  <section class="ss-quote-strip">
+  <!-- ────────── Quote Strip ────────── -->
+  <section class="ss-quote-strip" data-reveal="fade-up">
     <blockquote>
+      <span class="quote-mark" aria-hidden="true">&ldquo;</span>
       {% with quote=quotes|first %}
       {% if quote %}
       <p>{{ quote.text }}</p>
@@ -226,46 +258,43 @@
     </blockquote>
   </section>
 
-  <!-- Our Process -->
+  <!-- ────────── Our Process ────────── -->
   <section class="ss-process" id="process-section">
-    <div class="section-head">
+    <div class="section-head" data-reveal="fade-up">
       <span class="eyebrow-label">{{ section_process.0 }}</span>
       <h2 class="heading-primary">{{ section_process.1 }}</h2>
+      <span class="head-ornament" aria-hidden="true"></span>
     </div>
-    {% if process_steps %}
-    <div class="process-timeline" data-stagger>
+    <div class="process-timeline" data-reveal="stagger" data-stagger="0.18">
+      <span class="process-progress" id="processProgress" aria-hidden="true"></span>
       {% for step in process_steps %}
-      <div class="process-step" data-animate>
+      <div class="process-step" data-animate data-reveal-child>
         <div class="step-number">{{ step.step_number }}</div>
         <h3 class="step-title">{{ step.title }}</h3>
         <p class="step-desc">{{ step.description }}</p>
       </div>
       {% endfor %}
     </div>
-    {% endif %}
   </section>
 
-  <!-- Testimonials -->
+  <!-- ────────── Testimonials ────────── -->
   <section class="ss-testimonials" id="testimonials-section">
-    <div class="section-head">
+    <div class="section-head" data-reveal="fade-up">
       <span class="eyebrow-label">{{ section_testimonials.0 }}</span>
       <h2 class="heading-primary">{{ section_testimonials.1 }}</h2>
+      <span class="head-ornament" aria-hidden="true"></span>
     </div>
     <div class="testimonial-viewport">
       <div class="testimonial-ribbon" id="testimonialRibbon">
         {% for testimonial in testimonials %}
-        <article class="review-card">
-          {% if testimonial.image %}
-          <div class="review-avatar-wrap">
-            <img class="review-avatar" src="{{ testimonial.image.url }}" alt="Portrait of {{ testimonial.author_name }}" width="80" height="80" loading="lazy">
-          </div>
-          {% endif %}
+        <div class="review-card" data-reveal="fade-up" data-delay="{{ forloop.counter0|stringformat:'s' }}00">
+          <span class="review-quote" aria-hidden="true">&ldquo;</span>
           <p class="review-text">&ldquo;{{ testimonial.text }}&rdquo;</p>
           <div class="review-author">
             <strong>{{ testimonial.author_name }}</strong>
             <span>{{ testimonial.author_title }}</span>
           </div>
-        </article>
+        </div>
         {% endfor %}
       </div>
     </div>
@@ -277,45 +306,46 @@
     {% endif %}
   </section>
 
-  <!-- Stats Counter -->
-  {% if stats %}
-  <section class="ss-stats">
+  <!-- ────────── Stats Counter ────────── -->
+  <section class="ss-stats" data-reveal="fade-up">
     <div class="stats-row">
       {% for stat in stats %}
-      <div class="stat-cell" data-animate>
+      <div class="stat-cell" data-animate data-reveal="scale-in" data-delay="{{ forloop.counter0|stringformat:'s' }}00">
         <div class="stat-number" data-count="{{ stat.count }}" data-suffix="{{ stat.suffix }}">0</div>
         <div class="stat-label">{{ stat.label }}</div>
       </div>
       {% endfor %}
     </div>
   </section>
-  {% endif %}
 
-  <!-- CTA Parallax -->
+  <!-- ────────── CTA Parallax ────────── -->
   <section class="ss-cta-banner">
     {% with cta=cta_banners|first %}
     {% if cta %}
     <img src="{% if cta.image %}{{ cta.image.url }}{% else %}https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80{% endif %}" alt="{{ cta.heading }}" loading="lazy">
-    <div class="cta-content">
+    <div class="cta-content" data-reveal="fade-up">
+      <span class="cta-eyebrow">&mdash; Let's collaborate &mdash;</span>
       <h2>{{ cta.heading }}</h2>
-      <a href="{% if cta.button_link %}{{ cta.button_link }}{% else %}{% url 'contact' %}{% endif %}" class="solid-btn">{{ cta.button_text }}</a>
+      <a href="{% if cta.button_link %}{{ cta.button_link }}{% else %}{% url 'contact' %}{% endif %}" class="solid-btn" data-magnetic>{{ cta.button_text }}</a>
     </div>
     {% else %}
     <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80" alt="Studio setup" loading="lazy">
-    <div class="cta-content">
+    <div class="cta-content" data-reveal="fade-up">
+      <span class="cta-eyebrow">&mdash; Let's collaborate &mdash;</span>
       <h2>Ready to Create Something Beautiful?</h2>
-      <a href="{% url 'contact' %}" class="solid-btn">Book a Session</a>
+      <a href="{% url 'contact' %}" class="solid-btn" data-magnetic>Book a Session</a>
     </div>
     {% endif %}
     {% endwith %}
   </section>
 
-  <!-- Quick Contact -->
+  <!-- ────────── Quick Contact ────────── -->
   <section class="ss-contact-bar" id="contact-section">
     <div class="contact-wrapper">
-      <div class="contact-info-block">
+      <div class="contact-info-block" data-reveal="slide-left">
         <span class="eyebrow-label">{{ section_contact.0 }}</span>
         <h2 class="heading-primary">{{ section_contact.1 }}</h2>
+        <span class="head-ornament left" aria-hidden="true"></span>
         <div class="info-piece">
           <h4>Phone / WhatsApp</h4>
           <p><a href="{% if site.whatsapp_url %}{{ site.whatsapp_url }}{% else %}https://wa.me/{{ site.phone_whatsapp|cut:' '|cut:'+' }}{% endif %}">{{ site.phone_whatsapp|default:"+91 9XXX XXX XXX" }}</a></p>
@@ -333,62 +363,68 @@
           <p>{{ site.working_hours|default:"Mon – Sat: 10:00 AM – 8:00 PM" }}</p>
         </div>
       </div>
-      <form class="enquiry-form" id="enquiryForm" method="post" action="{% url 'new_designe' %}">
+
+      <form class="enquiry-form" id="enquiryForm" method="post" action="{% url 'new_designe' %}" data-reveal="slide-right">
         {% csrf_token %}
         {% if messages %}
         {% for message in messages %}
         <div class="form-message {{ message.tags }}">{{ message }}</div>
         {% endfor %}
         {% endif %}
-        <div class="field-float">
-          <input type="text" name="name" id="enquiry-name" placeholder=" " autocomplete="name" required>
-          <label for="enquiry-name">Your Name</label>
+
+        <div class="field">
+          <input type="text" name="name" id="f-name" placeholder=" " required>
+          <label for="f-name">Your Name</label>
         </div>
-        <div class="field-float">
-          <input type="email" name="email" id="enquiry-email" placeholder=" " autocomplete="email" required>
-          <label for="enquiry-email">Email Address</label>
+        <div class="field">
+          <input type="email" name="email" id="f-email" placeholder=" " required>
+          <label for="f-email">Email Address</label>
         </div>
-        <div class="field-float">
-          <input type="tel" name="phone" id="enquiry-phone" placeholder=" " autocomplete="tel">
-          <label for="enquiry-phone">Phone Number</label>
+        <div class="field">
+          <input type="tel" name="phone" id="f-phone" placeholder=" ">
+          <label for="f-phone">Phone Number</label>
         </div>
-        <div class="field-row">
-          <div class="field-float">
-            <input type="text" name="event_date" id="enquiry-event-date" placeholder=" ">
-            <label for="enquiry-event-date">Event Date</label>
-          </div>
-          <div class="field-float">
-            <input type="text" name="event_location" id="enquiry-event-location" placeholder=" ">
-            <label for="enquiry-event-location">Event Location</label>
-          </div>
+        <div class="field">
+          <input type="text" name="event_date" id="f-date" placeholder=" ">
+          <label for="f-date">Event Date</label>
         </div>
-        <div class="field-float">
-          <textarea rows="4" name="message" id="enquiry-message" placeholder=" "></textarea>
-          <label for="enquiry-message">Tell us about your project</label>
+        <div class="field">
+          <input type="text" name="event_location" id="f-loc" placeholder=" ">
+          <label for="f-loc">Event Location</label>
         </div>
-        <button type="submit" class="solid-btn solid-btn--submit" id="enquirySubmit">
-          <span class="btn-label">Send Enquiry</span>
-          <span class="btn-spinner" aria-hidden="true"></span>
-        </button>
+        <div class="field">
+          <textarea rows="4" name="message" id="f-msg" placeholder=" "></textarea>
+          <label for="f-msg">Tell us about your project…</label>
+        </div>
+
+        <button type="submit" class="solid-btn" data-magnetic>Send Enquiry</button>
       </form>
     </div>
   </section>
 
-  </main>
-
-  <!-- Footer -->
+  <!-- ────────── Footer ────────── -->
   <footer class="ss-footer">
     <div class="footer-content">
-      <a href="{% url 'new_designe' %}" class="footer-brand">
-        <img src="{% if site.logo %}{{ site.logo.url }}{% else %}{% static 'logo.png' %}{% endif %}" alt="{{ site.site_name|default:'Sarkari Shooting' }}">
-      </a>
-      <nav class="footer-nav">
+      <!-- Footer monogram with subtle pulsing rings -->
+      <div class="footer-monogram" aria-hidden="true">
+        <span class="footer-rings">
+          <span class="ring r1"></span>
+          <span class="ring r2"></span>
+          <span class="ring r3"></span>
+        </span>
+        <a href="{% url 'new_designe' %}" class="footer-brand" aria-label="{{ site.site_name|default:'Sarkari Shooting' }} home">
+          <img src="{% if site.logo %}{{ site.logo.url }}{% else %}{% static 'logo.png' %}{% endif %}" alt="{{ site.site_name|default:'Sarkari Shooting' }}">
+        </a>
+      </div>
+
+      <nav class="footer-nav" aria-label="Footer">
         <a href="#services-section">Services</a>
         <a href="#portfolio-section">Portfolio</a>
         <a href="#process-section">Process</a>
         <a href="#testimonials-section">Reviews</a>
         <a href="{% url 'contact' %}">Contact</a>
       </nav>
+
       <div class="footer-social">
         <a href="{{ site.whatsapp_url|default:'https://wa.me/919XXXXXXXXX' }}" target="_blank" rel="noopener" aria-label="WhatsApp">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -403,14 +439,18 @@
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
         </a>
       </div>
-      <div class="footer-monogram-wrap">
-        <p class="footer-monogram" aria-label="{{ site.site_name|default:'Sarkari Shooting' }} monogram">SS</p>
-        <p class="footer-tagline">Made with love — every frame, every story.</p>
-      </div>
+
       <p class="footer-copyright">{{ site.copyright_text }}</p>
     </div>
   </footer>
 
-  <script src="{% static 'new_designe_script.js' %}"></script>
+  <!-- ────────── Back to Top ────────── -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script src="{% static 'new_designe_script.js' %}" defer></script>
 </body>
 </html>

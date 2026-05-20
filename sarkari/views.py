@@ -76,18 +76,9 @@ class NewDesigneView(View):
 
     def _build_context(self):
         site = get_site_settings()
-        hero_slides = HeroSlide.objects.all()
-        first_slide = hero_slides.first()
-        # ISO datetime for hero countdown (India). Override in code when you have a fixed event date.
-        countdown_target_iso = "2026-09-20T18:30:00+05:30"
-        countdown_label = "Until our next signature film"
-        if first_slide:
-            countdown_label = f"Featured · {first_slide.date}"
         return {
             "site": site,
-            "hero_slides": hero_slides,
-            "countdown_target_iso": countdown_target_iso,
-            "countdown_label": countdown_label,
+            "hero_slides": HeroSlide.objects.all(),
             "brand_statements": BrandStatement.objects.all(),
             "services": Service.objects.all(),
             "portfolio_categories": PortfolioCategory.objects.prefetch_related("items").all(),
