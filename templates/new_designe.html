@@ -5,531 +5,484 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="{{ site.site_name|default:'Sarkari Shooting' }} — luxury cinematography & photography crafting cinematic visual stories.">
-  <title>{{ site.site_name|default:"Sarkari Shooting" }} | Cinematic Photography Studio</title>
+  <title>{{ site.site_name|default:"Sarkari Shooting" }} | Cinematography &amp; Photography</title>
 
   <link rel="icon" type="image/png" href="{% if site.favicon %}{{ site.favicon.url }}{% else %}{% static 'logo.png' %}{% endif %}">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Raleway:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="{% static 'new_designe_styles.css' %}">
 </head>
-<body data-theme="dark">
+<body>
 
-  <!-- ══════════ Global animated background (fixed, full-page) ══════════ -->
-  <div class="bg-layer" id="bgLayer" aria-hidden="true">
-    <div class="bg-aurora">
-      <span class="aurora-blob ab1"></span>
-      <span class="aurora-blob ab2"></span>
-      <span class="aurora-blob ab3"></span>
-      <span class="aurora-blob ab4"></span>
-    </div>
-    <canvas id="webgl" class="bg-canvas"></canvas>
-    <div class="bg-rays" aria-hidden="true"></div>
-    <div class="bg-vignette" aria-hidden="true"></div>
-  </div>
-
-  <!-- ══════════ Preloader : camera aperture ══════════ -->
-  <div class="preloader" id="preloader" aria-hidden="true">
-    <div class="aperture">
-      <svg viewBox="0 0 100 100" class="aperture-svg">
-        <circle cx="50" cy="50" r="46" class="aperture-ring"/>
-        <g class="aperture-blades">
-          <path d="M50 50 L50 4 A46 46 0 0 1 89.8 27 Z"/>
-          <path d="M50 50 L89.8 27 A46 46 0 0 1 89.8 73 Z"/>
-          <path d="M50 50 L89.8 73 A46 46 0 0 1 50 96 Z"/>
-          <path d="M50 50 L50 96 A46 46 0 0 1 10.2 73 Z"/>
-          <path d="M50 50 L10.2 73 A46 46 0 0 1 10.2 27 Z"/>
-          <path d="M50 50 L10.2 27 A46 46 0 0 1 50 4 Z"/>
-        </g>
-      </svg>
-      <span class="preloader-count" id="preloaderCount">0</span>
-    </div>
-    <p class="preloader-brand">{{ site.site_name|default:"Sarkari Shooting" }}</p>
-  </div>
-
-  <!-- Custom cursor -->
-  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
-  <div class="cursor-halo" id="cursorHalo" aria-hidden="true"></div>
-
-  <!-- Scroll progress -->
+  <!-- Scroll Progress Bar (thin gold line at the very top) -->
   <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
-  <!-- Film grain overlay -->
-  <div class="grain-overlay" aria-hidden="true"></div>
+  <!-- ────────── Splash / Flash Screen ────────── -->
+  <div class="ss-splash" id="ssSplash" aria-hidden="true">
+    <!-- Floating petals (rendered via JS) -->
+    <div class="splash-petals" id="splashPetals"></div>
 
-  <!-- ══════════ Navbar ══════════ -->
-  <header class="nav" id="mainNav">
-    <div class="nav-inner">
-      <a href="{% url 'new_designe' %}" class="nav-logo" aria-label="Home">
-        <img src="{% if site.logo %}{{ site.logo.url }}{% else %}{% static 'logo.png' %}{% endif %}" alt="{{ site.site_name|default:'Sarkari Shooting' }}">
-        <span class="nav-logo-text">{{ site.site_name|default:"Sarkari Shooting" }}</span>
+    <div class="splash-stage">
+      <!-- Pulsing concentric rings -->
+      <div class="splash-rings" aria-hidden="true">
+        <span class="ring r1"></span>
+        <span class="ring r2"></span>
+        <span class="ring r3"></span>
+        <span class="ring r4"></span>
+      </div>
+
+      <!-- Monogram from initials of the studio name -->
+      <div class="splash-monogram">
+        <span class="mono-letter">S</span>
+        <span class="mono-amp">·</span>
+        <span class="mono-letter">S</span>
+      </div>
+
+      <!-- Drawn gold divider -->
+      <span class="splash-line"></span>
+
+      <!-- Brand name & tagline -->
+      <h1 class="splash-name">{{ site.site_name|default:"Sarkari Shooting" }}</h1>
+      <p class="splash-tagline">Cinematic Storytelling · Est. Heritage</p>
+
+      <!-- Scroll cue -->
+      <div class="splash-cue">
+        <span>Begin the story</span>
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M6 9l6 6 6-6"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ────────── Navigation ────────── -->
+  <header class="ss-navigation" id="ssNav">
+    <div class="nav-wrap">
+      <a href="{% url 'new_designe' %}" class="nav-brand" aria-label="{{ site.site_name|default:'Sarkari Shooting' }} home">
+        <img src="{% if site.logo %}{{ site.logo.url }}{% else %}{% static 'logo.png' %}{% endif %}" alt="{{ site.site_name|default:'Sarkari Shooting' }} Logo">
       </a>
-      <nav class="nav-links" aria-label="Primary">
-        <a href="#about" data-nav>About</a>
-        <a href="#services" data-nav>Services</a>
-        <a href="#portfolio" data-nav>Portfolio</a>
-        <a href="#testimonials" data-nav>Reviews</a>
-        <a href="#pricing" data-nav>Packages</a>
-        <a href="#contact" data-nav>Contact</a>
+      <nav class="nav-menu" id="navMenu" aria-label="Primary">
+        <a href="#services-section">Services</a>
+        <a href="#portfolio-section">Portfolio</a>
+        <a href="#process-section">Process</a>
+        <a href="#pricing-section">Packages</a>
+        <a href="#testimonials-section">Reviews</a>
+        <a href="#contact-section">Contact</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <a href="{% url 'contact' %}" class="nav-enquire-btn" data-magnetic>Get In Touch</a>
       </nav>
-      <a href="#contact" class="btn btn-gold nav-cta" data-magnetic>Book Now</a>
-      <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
+      <button class="hamburger-btn" id="ssBurger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </header>
 
-  <!-- Mobile menu -->
-  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
-    <nav class="mobile-menu-links">
-      <a href="#about">About</a>
-      <a href="#services">Services</a>
-      <a href="#portfolio">Portfolio</a>
-      <a href="#testimonials">Reviews</a>
-      <a href="#pricing">Packages</a>
-      <a href="#contact">Contact</a>
-      <a href="#contact" class="btn btn-gold">Book Now</a>
-    </nav>
+  <!-- ────────── Mobile Overlay Menu ────────── -->
+  <div class="mobile-menu-overlay" id="ssMobileMenu" aria-hidden="true">
+    <ul class="mobile-menu-list">
+      <li><a href="#services-section">Services</a></li>
+      <li><a href="#portfolio-section">Portfolio</a></li>
+      <li><a href="#process-section">Process</a></li>
+      <li><a href="#pricing-section">Packages</a></li>
+      <li><a href="#testimonials-section">Reviews</a></li>
+      <li><a href="#contact-section">Contact</a></li>
+      <li><a href="{% url 'contact' %}" class="nav-enquire-btn">Get In Touch</a></li>
+      <li>
+        <button class="theme-toggle" id="themeToggleMobile" aria-label="Toggle dark/light mode" style="margin: 0.5rem auto 0;">
+          <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </li>
+    </ul>
   </div>
 
-  <!-- ══════════ 1 · Hero — 3D scene ══════════ -->
-  <section class="hero" id="hero">
-    <div class="hero-vignette" aria-hidden="true"></div>
-
-    <div class="hero-content">
-      <p class="hero-eyebrow" data-hero-stagger>— Cinematic Photography &amp; Films —</p>
-      <h1 class="hero-title" aria-label="{{ site.site_name|default:'Sarkari Shooting' }}">
-        <span class="hero-line"><span data-hero-stagger>{{ site.site_name|default:"Sarkari" }}</span></span>
-        <span class="hero-line hero-line-script"><span data-hero-stagger>Shooting</span></span>
-      </h1>
-      <p class="hero-tagline" data-hero-stagger>We freeze the moments your heart never wants to let go.</p>
-      <div class="hero-ctas" data-hero-stagger>
-        <a href="#portfolio" class="btn btn-gold" data-magnetic>Explore Portfolio</a>
-        <a href="#contact" class="btn btn-ghost" data-magnetic>
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16" fill="currentColor" stroke="none"/></svg>
-          Book a Session
-        </a>
-      </div>
-    </div>
-
-    <div class="hero-side hero-side-left" aria-hidden="true"><span>EST. 2014 — JAIPUR, INDIA</span></div>
-    <div class="hero-side hero-side-right" aria-hidden="true"><span>WEDDINGS · PORTRAITS · FILMS</span></div>
-
-    <div class="hero-scroll" aria-hidden="true">
-      <span class="hero-scroll-label">Scroll</span>
-      <span class="hero-scroll-line"></span>
-    </div>
-  </section>
-
-  <!-- ══════════ Marquee ══════════ -->
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee-track">
-      <span>Weddings ✦ Portraits ✦ Events ✦ Commercial ✦ Pre-Wedding ✦ Fashion ✦ Cinematic Films ✦&nbsp;</span>
-      <span>Weddings ✦ Portraits ✦ Events ✦ Commercial ✦ Pre-Wedding ✦ Fashion ✦ Cinematic Films ✦&nbsp;</span>
-    </div>
-  </div>
-
-  <!-- ══════════ 2 · About ══════════ -->
-  <section class="about section" id="about">
-    <div class="about-grid">
-      <div class="about-media" data-reveal="slide-right">
-        <div class="about-photo-frame" data-tilt data-tilt-max="6">
-          <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=900&q=80" alt="Lead photographer at work" loading="lazy">
-          <span class="about-frame-border" aria-hidden="true"></span>
+  <!-- ────────── Hero Slideshow ────────── -->
+  <section class="ss-hero" id="heroSection">
+    <div class="hero-slide-container">
+      {% for slide in hero_slides %}
+      <div class="hero-frame {% if forloop.first %}is-active{% endif %}" data-idx="{{ forloop.counter0 }}">
+        <img src="{% if slide.image %}{{ slide.image.url }}{% else %}https://images.unsplash.com/photo-1505932794465-147d1f1b2c97?w=1920&q=80{% endif %}" alt="{{ slide.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+        <div class="hero-text-block">
+          <span class="hero-eyebrow"><span class="hero-eyebrow-dash"></span>{{ slide.location }}</span>
+          <span class="hero-date">{{ slide.date }}</span>
+          <h2 class="hero-title" data-letter-reveal>{{ slide.title }}</h2>
+          <span class="hero-divider" aria-hidden="true"></span>
+          <p class="hero-desc">{{ slide.description }}</p>
+          <a href="#portfolio-section" class="hero-play-link" data-magnetic>
+            <svg viewBox="0 0 64 64" width="60" height="60" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="26,20 26,44 46,32" fill="currentColor"/></svg>
+            <span>{{ slide.link_text }}</span>
+          </a>
         </div>
-        <div class="about-photo-small" data-parallax data-speed="-0.15">
-          <img src="https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=600&q=80" alt="Camera detail" loading="lazy">
-        </div>
-        <span class="about-script" aria-hidden="true">Since 2014</span>
-      </div>
-      <div class="about-copy">
-        <span class="eyebrow" data-reveal="fade-up">The Studio</span>
-        <h2 class="h2" data-reveal="fade-up">Every frame is a <em>love letter</em> to light.</h2>
-        <span class="rule-gold" data-reveal="fade-up" aria-hidden="true"></span>
-        {% with brand=brand_statements|first %}
-        <p class="lead" data-reveal="fade-up">
-          {% if brand %}{{ brand.headline }} — {{ brand.tagline }}{% else %}
-          We are {{ site.site_name|default:"Sarkari Shooting" }}, a team of storytellers obsessed with the
-          in-between moments — the glance before the vow, the laugh between the poses, the quiet after the celebration.{% endif %}
-        </p>
-        {% endwith %}
-        <p class="body-text" data-reveal="fade-up">
-          For over a decade we have travelled across India capturing royal weddings, intimate
-          portraits and ambitious commercial campaigns. Our craft blends classic editorial
-          composition with a modern cinematic grade — moody shadows, golden highlights, honest emotion.
-        </p>
-        <div class="about-signature" data-reveal="fade-up">
-          <span class="signature-script">The Sarkari Team</span>
-          <span class="signature-role">Founders &amp; Lead Photographers</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════ 3 · Stats ══════════ -->
-  <section class="stats" id="stats">
-    <div class="stats-grid">
-      {% for stat in stats %}
-      <div class="stat" data-reveal="fade-up" data-delay="{{ forloop.counter0 }}">
-        <span class="stat-value"><span class="stat-num" data-count="{{ stat.count }}">0</span><span class="stat-suffix">{{ stat.suffix }}</span></span>
-        <span class="stat-label">{{ stat.label }}</span>
       </div>
       {% empty %}
-      <div class="stat" data-reveal="fade-up" data-delay="0">
-        <span class="stat-value"><span class="stat-num" data-count="500">0</span><span class="stat-suffix">+</span></span>
-        <span class="stat-label">Shoots Completed</span>
-      </div>
-      <div class="stat" data-reveal="fade-up" data-delay="1">
-        <span class="stat-value"><span class="stat-num" data-count="200">0</span><span class="stat-suffix">+</span></span>
-        <span class="stat-label">Happy Clients</span>
-      </div>
-      <div class="stat" data-reveal="fade-up" data-delay="2">
-        <span class="stat-value"><span class="stat-num" data-count="15">0</span><span class="stat-suffix">+</span></span>
-        <span class="stat-label">Awards Won</span>
-      </div>
-      <div class="stat" data-reveal="fade-up" data-delay="3">
-        <span class="stat-value"><span class="stat-num" data-count="10">0</span><span class="stat-suffix"></span></span>
-        <span class="stat-label">Years of Experience</span>
+      <div class="hero-frame is-active" data-idx="0">
+        <img src="https://images.unsplash.com/photo-1505932794465-147d1f1b2c97?w=1920&q=80" alt="Cinematic wedding shoot" loading="eager">
+        <div class="hero-text-block">
+          <span class="hero-eyebrow"><span class="hero-eyebrow-dash"></span>Udaipur, Rajasthan</span>
+          <span class="hero-date">February 2026</span>
+          <h2 class="hero-title" data-letter-reveal>Royal Wedding Film</h2>
+          <span class="hero-divider" aria-hidden="true"></span>
+          <p class="hero-desc">A grand celebration in the City of Lakes, captured through our cinematic lens.</p>
+          <a href="#portfolio-section" class="hero-play-link" data-magnetic>
+            <svg viewBox="0 0 64 64" width="60" height="60" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="26,20 26,44 46,32" fill="currentColor"/></svg>
+            <span>View Portfolio</span>
+          </a>
+        </div>
       </div>
       {% endfor %}
     </div>
+
+    {% if hero_slides|length > 1 %}
+    <div class="hero-navigation">
+      <button class="hero-nav-arrow hero-prev-btn" aria-label="Previous slide">&#8592;</button>
+      <div class="hero-pagination" id="heroPagination"></div>
+      <button class="hero-nav-arrow hero-next-btn" aria-label="Next slide">&#8594;</button>
+    </div>
+    {% endif %}
+
+    <div class="hero-scroll-cue" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="scroll-indicator"></div>
+    </div>
   </section>
 
-  <!-- ══════════ 4 · Services ══════════ -->
-  <section class="services section" id="services">
-    <div class="section-head">
-      <span class="eyebrow" data-reveal="fade-up">{{ section_services.0|default:"What We Offer" }}</span>
-      <h2 class="h2" data-reveal="fade-up">{{ section_services.1|default:"Our Creative Services" }}</h2>
-      <span class="rule-gold centered" data-reveal="fade-up" aria-hidden="true"></span>
+  <!-- ────────── Brand Statement ────────── -->
+  <section class="ss-brand-statement" data-reveal="fade-up">
+    <div class="brand-statement-inner">
+      <span class="brand-ornament" aria-hidden="true">
+        <span class="brand-orn-line"></span>
+        <span class="brand-orn-diamond"></span>
+        <span class="brand-orn-line"></span>
+      </span>
+      {% with brand=brand_statements|first %}
+      {% if brand %}
+      <h2 class="brand-headline">{{ brand.headline }}</h2>
+      <p class="brand-tagline">{{ brand.tagline }}</p>
+      {% else %}
+      <h2 class="brand-headline">Crafting Visual Stories That Last Forever</h2>
+      <p class="brand-tagline">Professional Cinematography &amp; Photography Services</p>
+      {% endif %}
+      {% endwith %}
     </div>
-    <div class="services-grid">
+  </section>
+
+  <!-- ────────── Services ────────── -->
+  <section class="ss-services" id="services-section">
+    <div class="section-head" data-reveal="fade-up">
+      <span class="eyebrow-label">{{ section_services.0 }}</span>
+      <h2 class="heading-primary">{{ section_services.1 }}</h2>
+      <span class="head-ornament" aria-hidden="true"></span>
+    </div>
+    <div class="services-mosaic" data-reveal="stagger" data-stagger="0.12">
       {% for service in services %}
-      <article class="service-card" data-tilt data-tilt-max="8" data-reveal="fade-up" data-delay="{{ forloop.counter0 }}">
-        <span class="service-index">0{{ forloop.counter }}</span>
-        <div class="service-icon">
-          {% if service.icon %}<img src="{{ service.icon.url }}" alt="" width="44" height="44">{% else %}
-          <svg viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="4" y="12" width="40" height="28" rx="4"/><path d="M16 12l3-6h10l3 6"/><circle cx="24" cy="26" r="8"/><circle cx="24" cy="26" r="3.5"/></svg>
+      <article class="service-tile" data-animate data-reveal-child>
+        <div class="tile-icon">
+          {% if service.icon %}
+          <img src="{{ service.icon.url }}" alt="{{ service.name }}" width="48" height="48" style="object-fit: contain;">
+          {% else %}
+          <svg viewBox="0 0 48 48" width="48" height="48" aria-hidden="true"><rect x="4" y="10" width="40" height="28" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="24" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="24" r="3" fill="currentColor"/></svg>
           {% endif %}
         </div>
-        <h3 class="service-name">{{ service.name }}</h3>
-        <p class="service-desc">{{ service.description }}</p>
-        <a href="#contact" class="service-link">Enquire <span aria-hidden="true">→</span></a>
-        <span class="card-glow" aria-hidden="true"></span>
-      </article>
-      {% empty %}
-      <article class="service-card" data-tilt data-tilt-max="8" data-reveal="fade-up" data-delay="0">
-        <span class="service-index">01</span>
-        <div class="service-icon"><svg viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M24 6l5 9 10 2-7 8 1.5 10L24 30l-9.5 5L16 25l-7-8 10-2z"/></svg></div>
-        <h3 class="service-name">Weddings</h3>
-        <p class="service-desc">Full-day cinematic coverage of your celebration — candid emotion, grand portraits and a film you will replay forever.</p>
-        <a href="#contact" class="service-link">Enquire <span aria-hidden="true">→</span></a>
-        <span class="card-glow" aria-hidden="true"></span>
-      </article>
-      <article class="service-card" data-tilt data-tilt-max="8" data-reveal="fade-up" data-delay="1">
-        <span class="service-index">02</span>
-        <div class="service-icon"><svg viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="24" cy="17" r="8"/><path d="M8 42c0-9 7-14 16-14s16 5 16 14"/></svg></div>
-        <h3 class="service-name">Portraits</h3>
-        <p class="service-desc">Editorial studio &amp; outdoor portraiture sculpted with light — for individuals, couples, families and artists.</p>
-        <a href="#contact" class="service-link">Enquire <span aria-hidden="true">→</span></a>
-        <span class="card-glow" aria-hidden="true"></span>
-      </article>
-      <article class="service-card" data-tilt data-tilt-max="8" data-reveal="fade-up" data-delay="2">
-        <span class="service-index">03</span>
-        <div class="service-icon"><svg viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M10 40V20l14-10 14 10v20"/><path d="M4 42h40"/><path d="M19 42V30h10v12"/></svg></div>
-        <h3 class="service-name">Events</h3>
-        <p class="service-desc">Concerts, conferences, galas and private parties — multi-camera coverage that misses nothing.</p>
-        <a href="#contact" class="service-link">Enquire <span aria-hidden="true">→</span></a>
-        <span class="card-glow" aria-hidden="true"></span>
-      </article>
-      <article class="service-card" data-tilt data-tilt-max="8" data-reveal="fade-up" data-delay="3">
-        <span class="service-index">04</span>
-        <div class="service-icon"><svg viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="6" y="10" width="36" height="24" rx="3"/><path d="M18 42h12M24 34v8"/><polygon points="20,16 30,22 20,28" fill="currentColor" stroke="none"/></svg></div>
-        <h3 class="service-name">Commercial</h3>
-        <p class="service-desc">Brand campaigns, product photography and fashion lookbooks with agency-grade production value.</p>
-        <a href="#contact" class="service-link">Enquire <span aria-hidden="true">→</span></a>
-        <span class="card-glow" aria-hidden="true"></span>
+        <span class="tile-tag">{{ service.tag }}</span>
+        <h3 class="tile-name">{{ service.name }}</h3>
+        <p class="tile-text">{{ service.description }}</p>
+        <span class="tile-corner" aria-hidden="true"></span>
       </article>
       {% endfor %}
     </div>
   </section>
 
-  <!-- ══════════ 5 · Portfolio ══════════ -->
-  <section class="portfolio section" id="portfolio">
-    <div class="section-head">
-      <span class="eyebrow" data-reveal="fade-up">{{ section_portfolio.0|default:"Our Work" }}</span>
-      <h2 class="h2" data-reveal="fade-up">{{ section_portfolio.1|default:"Featured Portfolio" }}</h2>
-      <span class="rule-gold centered" data-reveal="fade-up" aria-hidden="true"></span>
+  <!-- ────────── Portfolio Gallery ────────── -->
+  <section class="ss-portfolio" id="portfolio-section">
+    <div class="section-head" data-reveal="fade-up">
+      <span class="eyebrow-label">{{ section_portfolio.0 }}</span>
+      <h2 class="heading-primary">{{ section_portfolio.1 }}</h2>
+      <span class="head-ornament" aria-hidden="true"></span>
     </div>
 
-    <div class="filter-bar" id="filterBar" data-reveal="fade-up">
-      <button class="filter-btn is-active" data-filter="all">All</button>
+    {% if portfolio_categories %}
+    <div class="filter-strip" data-reveal="fade-up" data-delay="0.15">
       {% for cat in portfolio_categories %}
-      <button class="filter-btn" data-filter="{{ cat.slug }}">{{ cat.name }}</button>
-      {% empty %}
-      <button class="filter-btn" data-filter="weddings">Weddings</button>
-      <button class="filter-btn" data-filter="portraits">Portraits</button>
-      <button class="filter-btn" data-filter="events">Events</button>
-      <button class="filter-btn" data-filter="commercial">Commercial</button>
+      <button class="filter-chip {% if forloop.first %}is-selected{% endif %}" data-filter="{{ cat.slug }}">{{ cat.name }}</button>
       {% endfor %}
     </div>
-
-    <div class="masonry" id="masonryGrid">
-      {% if portfolio_categories %}
-        {% for cat in portfolio_categories %}
-          {% for item in cat.items.all %}
-          <a href="{% url 'film_detail' item.pk %}" class="masonry-item" data-category="{{ cat.slug }}" data-tilt data-tilt-max="5">
-            <img src="{% if item.image %}{{ item.image.url }}{% else %}https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80{% endif %}" alt="{{ item.title }}" loading="lazy">
-            <div class="masonry-overlay">
-              <span class="masonry-cat">{{ cat.name }}</span>
-              <h3 class="masonry-title">{{ item.title }}</h3>
-              <span class="masonry-meta">{{ item.meta }}</span>
-            </div>
-          </a>
-          {% endfor %}
+    <div id="portfolioGrid">
+      {% for cat in portfolio_categories %}
+      <div class="gallery-panel {% if forloop.first %}is-shown{% endif %}" data-gallery="{{ cat.slug }}">
+        {% for item in cat.items.all %}
+        <a href="{% url 'film_detail' item.pk %}" class="portfolio-item" data-animate data-reveal="fade-up" data-delay="{{ forloop.counter0|stringformat:'s' }}00">
+          <div class="portfolio-thumb">
+            <img src="{% if item.image %}{{ item.image.url }}{% else %}https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80{% endif %}" alt="{{ item.title }}" loading="lazy">
+            <div class="portfolio-hover"><span class="portfolio-play-icon">&#9654;</span></div>
+            <span class="portfolio-shutter" aria-hidden="true"></span>
+          </div>
+          <div class="portfolio-caption">
+            <h3>{{ item.title }}</h3>
+            <span class="portfolio-meta">{{ item.meta }}</span>
+          </div>
+        </a>
         {% endfor %}
-      {% endif %}
-      <!-- Placeholder items render via JS when the grid is empty -->
+      </div>
+      {% endfor %}
     </div>
+    {% endif %}
 
-    <div class="portfolio-more" data-reveal="fade-up">
-      <a href="{% url 'contact' %}" class="btn btn-ghost" data-magnetic>View Full Archive</a>
+    <div class="gallery-view-all" data-reveal="fade-up">
+      <a href="{% url 'contact' %}" class="outline-btn" data-magnetic>View All Projects</a>
     </div>
   </section>
 
-  <!-- ══════════ Quote / parallax banner ══════════ -->
-  <section class="quote-banner">
-    <div class="quote-banner-bg" data-parallax-bg>
-      <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80" alt="" loading="lazy" aria-hidden="true">
-    </div>
-    <blockquote class="quote-banner-text" data-reveal="fade-up">
+  <!-- ────────── Quote Strip ────────── -->
+  <section class="ss-quote-strip" data-reveal="fade-up">
+    <blockquote>
+      <span class="quote-mark" aria-hidden="true">&ldquo;</span>
       {% with quote=quotes|first %}
-      <p>&ldquo;{% if quote %}{{ quote.text }}{% else %}When words fall short, a photograph speaks an entire lifetime.{% endif %}&rdquo;</p>
-      <cite>— {% if quote %}{{ quote.author }}{% else %}{{ site.site_name|default:"Sarkari Shooting" }}{% endif %}</cite>
+      {% if quote %}
+      <p>{{ quote.text }}</p>
+      <cite>&mdash; {{ quote.author }}</cite>
+      {% else %}
+      <p>A photograph is a secret about a secret. The more it tells you, the less you know.</p>
+      <cite>&mdash; Sarkari Shooting</cite>
+      {% endif %}
       {% endwith %}
     </blockquote>
   </section>
 
-  <!-- ══════════ 6 · Testimonials ══════════ -->
-  <section class="testimonials section" id="testimonials">
-    <div class="section-head">
-      <span class="eyebrow" data-reveal="fade-up">{{ section_testimonials.0|default:"Client Love" }}</span>
-      <h2 class="h2" data-reveal="fade-up">{{ section_testimonials.1|default:"What Our Clients Say" }}</h2>
-      <span class="rule-gold centered" data-reveal="fade-up" aria-hidden="true"></span>
+  <!-- ────────── Our Process ────────── -->
+  <section class="ss-process" id="process-section">
+    <div class="section-head" data-reveal="fade-up">
+      <span class="eyebrow-label">{{ section_process.0 }}</span>
+      <h2 class="heading-primary">{{ section_process.1 }}</h2>
+      <span class="head-ornament" aria-hidden="true"></span>
     </div>
-
-    <div class="testimonial-stage" id="testimonialStage" data-reveal="fade-up">
-      {% for t in testimonials %}
-      <figure class="testimonial-slide{% if forloop.first %} is-active{% endif %}">
-        <span class="testimonial-mark" aria-hidden="true">&ldquo;</span>
-        <blockquote>{{ t.text }}</blockquote>
-        <figcaption><strong>{{ t.author_name }}</strong><span>{{ t.author_title }}</span></figcaption>
-      </figure>
-      {% empty %}
-      <figure class="testimonial-slide is-active">
-        <span class="testimonial-mark" aria-hidden="true">&ldquo;</span>
-        <blockquote>They didn't just photograph our wedding — they bottled the entire feeling of that day. Every time we open the album it all comes rushing back.</blockquote>
-        <figcaption><strong>Aarav &amp; Meera</strong><span>Wedding, Udaipur</span></figcaption>
-      </figure>
-      <figure class="testimonial-slide">
-        <span class="testimonial-mark" aria-hidden="true">&ldquo;</span>
-        <blockquote>Insanely professional team. The campaign images lifted our brand overnight — our engagement tripled within a month of the launch.</blockquote>
-        <figcaption><strong>Riya Kapoor</strong><span>Brand Campaign, Mumbai</span></figcaption>
-      </figure>
-      <figure class="testimonial-slide">
-        <span class="testimonial-mark" aria-hidden="true">&ldquo;</span>
-        <blockquote>The portraits felt like stills from a film I'd want to live in. Moody, golden, honest. Worth every rupee and more.</blockquote>
-        <figcaption><strong>Kabir Singh</strong><span>Editorial Portraits, Jaipur</span></figcaption>
-      </figure>
+    <div class="process-timeline" data-reveal="stagger" data-stagger="0.18">
+      <span class="process-progress" id="processProgress" aria-hidden="true"></span>
+      {% for step in process_steps %}
+      <div class="process-step" data-animate data-reveal-child>
+        <div class="step-number">{{ step.step_number }}</div>
+        <h3 class="step-title">{{ step.title }}</h3>
+        <p class="step-desc">{{ step.description }}</p>
+      </div>
       {% endfor %}
-      <div class="testimonial-dots" id="testimonialDots" role="tablist" aria-label="Testimonials"></div>
     </div>
   </section>
 
-  <!-- ══════════ 7 · Pricing ══════════ -->
-  <section class="pricing section" id="pricing">
-    <div class="section-head">
-      <span class="eyebrow" data-reveal="fade-up">Investment</span>
-      <h2 class="h2" data-reveal="fade-up">Packages &amp; Pricing</h2>
-      <span class="rule-gold centered" data-reveal="fade-up" aria-hidden="true"></span>
+  <!-- ────────── Packages & Pricing ────────── -->
+  {% if pricing_packages %}
+  <section class="ss-pricing" id="pricing-section">
+    <div class="section-head" data-reveal="fade-up">
+      <span class="eyebrow-label">{{ section_pricing.0 }}</span>
+      <h2 class="heading-primary">{{ section_pricing.1 }}</h2>
+      <span class="head-ornament" aria-hidden="true"></span>
     </div>
 
     <div class="pricing-toggle" data-reveal="fade-up" role="group" aria-label="Package type">
-      <button class="toggle-opt is-active" data-mode="photo">Photography</button>
-      <button class="toggle-opt" data-mode="film">Photo + Film</button>
+      <button type="button" class="pricing-toggle-btn is-selected" data-tier="photography">Photography</button>
+      <button type="button" class="pricing-toggle-btn" data-tier="cinematography">Cinematography</button>
     </div>
 
-    <div class="pricing-grid">
-      <article class="price-card" data-tilt data-tilt-max="5" data-reveal="fade-up" data-delay="0">
-        <h3 class="price-tier">Basic</h3>
-        <p class="price-amount"><span class="price-currency">₹</span><span class="price-value" data-photo="35000" data-film="60000">35,000</span></p>
-        <p class="price-note">per session</p>
-        <ul class="price-features">
-          <li>4 hours of coverage</li>
-          <li>1 photographer</li>
-          <li>150+ edited photos</li>
-          <li>Online gallery</li>
-          <li>Delivery in 2 weeks</li>
+    <div class="pricing-grid" data-reveal="fade-up" data-delay="0.1">
+      {% for pkg in pricing_packages %}
+      <article class="pricing-card{% if pkg.is_featured %} is-featured{% endif %}{% if pkg.tier != 'photography' %} is-hidden{% endif %}" data-tier="{{ pkg.tier }}">
+        {% if pkg.is_featured %}<span class="pricing-badge">Most Popular</span>{% endif %}
+        <h3 class="pricing-tier">{{ pkg.name }}</h3>
+        <p class="pricing-amount"><span class="pricing-currency">₹</span>{{ pkg.price }}</p>
+        <p class="pricing-note">{{ pkg.price_suffix }}</p>
+        <ul class="pricing-features">
+          {% for feature in pkg.feature_list %}
+          <li>{{ feature }}</li>
+          {% endfor %}
         </ul>
-        <a href="#contact" class="btn btn-ghost btn-block" data-magnetic>Choose Basic</a>
+        <a href="#contact-section" class="pricing-btn outline-btn" data-magnetic>Choose {{ pkg.name }}</a>
+        <span class="tile-corner" aria-hidden="true"></span>
       </article>
-      <article class="price-card is-featured" data-tilt data-tilt-max="5" data-reveal="fade-up" data-delay="1">
-        <span class="price-badge">Most Popular</span>
-        <h3 class="price-tier">Standard</h3>
-        <p class="price-amount"><span class="price-currency">₹</span><span class="price-value" data-photo="75000" data-film="125000">75,000</span></p>
-        <p class="price-note">per event</p>
-        <ul class="price-features">
-          <li>Full-day coverage</li>
-          <li>2 photographers</li>
-          <li>400+ edited photos</li>
-          <li>Premium photo album</li>
-          <li>Cinematic highlight reel</li>
-          <li>Delivery in 10 days</li>
-        </ul>
-        <a href="#contact" class="btn btn-gold btn-block" data-magnetic>Choose Standard</a>
-      </article>
-      <article class="price-card" data-tilt data-tilt-max="5" data-reveal="fade-up" data-delay="2">
-        <h3 class="price-tier">Premium</h3>
-        <p class="price-amount"><span class="price-currency">₹</span><span class="price-value" data-photo="150000" data-film="250000">1,50,000</span></p>
-        <p class="price-note">per celebration</p>
-        <ul class="price-features">
-          <li>Multi-day coverage</li>
-          <li>Full crew + drone</li>
-          <li>1000+ edited photos</li>
-          <li>Luxury fine-art album</li>
-          <li>Full cinematic wedding film</li>
-          <li>Same-day teaser edit</li>
-          <li>Priority 7-day delivery</li>
-        </ul>
-        <a href="#contact" class="btn btn-ghost btn-block" data-magnetic>Choose Premium</a>
-      </article>
+      {% endfor %}
     </div>
   </section>
+  {% endif %}
 
-  <!-- ══════════ 8 · Availability widget ══════════ -->
-  <section class="availability section-tight" id="availability">
-    <div class="availability-card" data-reveal="fade-up">
-      <div class="availability-left">
-        <span class="availability-pulse" aria-hidden="true"></span>
-        <div>
-          <h3 class="availability-title">Now booking — limited dates</h3>
-          <p class="availability-sub">Next available slot</p>
-          <p class="availability-slot" id="nextSlot">—</p>
-        </div>
-      </div>
-      <div class="availability-cal" id="miniCalendar" aria-label="Availability this month"></div>
-      <a href="#contact" class="btn btn-gold" data-magnetic>Reserve a Date</a>
+  <!-- ────────── Testimonials ────────── -->
+  <section class="ss-testimonials" id="testimonials-section">
+    <div class="section-head" data-reveal="fade-up">
+      <span class="eyebrow-label">{{ section_testimonials.0 }}</span>
+      <h2 class="heading-primary">{{ section_testimonials.1 }}</h2>
+      <span class="head-ornament" aria-hidden="true"></span>
     </div>
-  </section>
-
-  <!-- ══════════ 9 · Instagram feed ══════════ -->
-  <section class="insta section" id="instagram">
-    <div class="section-head">
-      <span class="eyebrow" data-reveal="fade-up">Latest Shoots</span>
-      <h2 class="h2" data-reveal="fade-up">From the Lens, Daily</h2>
-      <a class="insta-handle" data-reveal="fade-up" href="{{ site.instagram_url|default:'https://instagram.com/sarkarishooting' }}" target="_blank" rel="noopener">@sarkarishooting</a>
-    </div>
-    <div class="insta-grid" id="instaGrid" data-reveal="fade-up">
-      <!-- tiles injected by JS -->
-    </div>
-  </section>
-
-  <!-- ══════════ 10 · Contact / Booking ══════════ -->
-  <section class="contact section" id="contact">
-    <div class="contact-grid">
-      <div class="contact-info" data-reveal="slide-right">
-        <span class="eyebrow">{{ section_contact.0|default:"Reach Out" }}</span>
-        <h2 class="h2">{{ section_contact.1|default:"Let's Create Together" }}</h2>
-        <span class="rule-gold" aria-hidden="true"></span>
-        <p class="body-text">Tell us about your day, your idea, your brand. We reply within 24 hours — usually much faster.</p>
-
-        <div class="contact-rows">
-          <div class="contact-row">
-            <span class="contact-row-label">Phone / WhatsApp</span>
-            <a href="{% if site.whatsapp_url %}{{ site.whatsapp_url }}{% else %}https://wa.me/{{ site.phone_whatsapp|cut:' '|cut:'+' }}{% endif %}">{{ site.phone_whatsapp|default:"+91 9XXX XXX XXX" }}</a>
-          </div>
-          <div class="contact-row">
-            <span class="contact-row-label">Email</span>
-            <a href="mailto:{{ site.email|default:'info@sarkarishooting.com' }}">{{ site.email|default:"info@sarkarishooting.com" }}</a>
-          </div>
-          <div class="contact-row">
-            <span class="contact-row-label">Studio</span>
-            <p>{{ site.studio_address|default:"Near City Palace, Jaipur, Rajasthan 302001" }}</p>
-          </div>
-          <div class="contact-row">
-            <span class="contact-row-label">Hours</span>
-            <p>{{ site.working_hours|default:"Mon – Sat · 10:00 AM – 8:00 PM" }}</p>
+    <div class="testimonial-viewport">
+      <div class="testimonial-ribbon" id="testimonialRibbon">
+        {% for testimonial in testimonials %}
+        <div class="review-card" data-reveal="fade-up" data-delay="{{ forloop.counter0|stringformat:'s' }}00">
+          <span class="review-quote" aria-hidden="true">&ldquo;</span>
+          <p class="review-text">&ldquo;{{ testimonial.text }}&rdquo;</p>
+          <div class="review-author">
+            <strong>{{ testimonial.author_name }}</strong>
+            <span>{{ testimonial.author_title }}</span>
           </div>
         </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% if testimonials %}
+    <div class="testimonial-arrows">
+      <button class="slide-arrow" id="testimPrev" aria-label="Previous review">&#8592;</button>
+      <button class="slide-arrow" id="testimNext" aria-label="Next review">&#8594;</button>
+    </div>
+    {% endif %}
+  </section>
+
+  <!-- ────────── Stats Counter ────────── -->
+  <section class="ss-stats" data-reveal="fade-up">
+    <div class="stats-row">
+      {% for stat in stats %}
+      <div class="stat-cell" data-animate data-reveal="scale-in" data-delay="{{ forloop.counter0|stringformat:'s' }}00">
+        <div class="stat-number" data-count="{{ stat.count }}" data-suffix="{{ stat.suffix }}">0</div>
+        <div class="stat-label">{{ stat.label }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ────────── CTA Parallax ────────── -->
+  <section class="ss-cta-banner">
+    {% with cta=cta_banners|first %}
+    {% if cta %}
+    <img src="{% if cta.image %}{{ cta.image.url }}{% else %}https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80{% endif %}" alt="{{ cta.heading }}" loading="lazy">
+    <div class="cta-content" data-reveal="fade-up">
+      <span class="cta-eyebrow">&mdash; Let's collaborate &mdash;</span>
+      <h2>{{ cta.heading }}</h2>
+      <a href="{% if cta.button_link %}{{ cta.button_link }}{% else %}{% url 'contact' %}{% endif %}" class="solid-btn" data-magnetic>{{ cta.button_text }}</a>
+    </div>
+    {% else %}
+    <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80" alt="Studio setup" loading="lazy">
+    <div class="cta-content" data-reveal="fade-up">
+      <span class="cta-eyebrow">&mdash; Let's collaborate &mdash;</span>
+      <h2>Ready to Create Something Beautiful?</h2>
+      <a href="{% url 'contact' %}" class="solid-btn" data-magnetic>Book a Session</a>
+    </div>
+    {% endif %}
+    {% endwith %}
+  </section>
+
+  <!-- ────────── Quick Contact ────────── -->
+  <section class="ss-contact-bar" id="contact-section">
+    <div class="contact-wrapper">
+      <div class="contact-info-block" data-reveal="slide-left">
+        <span class="eyebrow-label">{{ section_contact.0 }}</span>
+        <h2 class="heading-primary">{{ section_contact.1 }}</h2>
+        <span class="head-ornament left" aria-hidden="true"></span>
+        <div class="info-piece">
+          <h4>Phone / WhatsApp</h4>
+          <p><a href="{% if site.whatsapp_url %}{{ site.whatsapp_url }}{% else %}https://wa.me/{{ site.phone_whatsapp|cut:' '|cut:'+' }}{% endif %}">{{ site.phone_whatsapp|default:"+91 9XXX XXX XXX" }}</a></p>
+        </div>
+        <div class="info-piece">
+          <h4>Studio Address</h4>
+          <p>{{ site.studio_address|default:"Sarkari Shooting Studio, Near City Palace, Jaipur, Rajasthan 302001" }}</p>
+        </div>
+        <div class="info-piece">
+          <h4>Email</h4>
+          <p><a href="mailto:{{ site.email|default:'info@sarkarishooting.com' }}">{{ site.email|default:"info@sarkarishooting.com" }}</a></p>
+        </div>
+        <div class="info-piece">
+          <h4>Working Hours</h4>
+          <p>{{ site.working_hours|default:"Mon – Sat: 10:00 AM – 8:00 PM" }}</p>
+        </div>
       </div>
 
-      <form class="contact-form" method="post" action="{% url 'new_designe' %}" data-reveal="slide-left">
+      <form class="enquiry-form" id="enquiryForm" method="post" action="{% url 'new_designe' %}" data-reveal="slide-right">
         {% csrf_token %}
-        {% if messages %}{% for message in messages %}
-        <div class="form-flash {{ message.tags }}">{{ message }}</div>
-        {% endfor %}{% endif %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="form-message {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
 
-        <div class="form-row">
-          <div class="field"><input type="text" name="name" id="f-name" placeholder=" " required><label for="f-name">Your Name *</label></div>
-          <div class="field"><input type="email" name="email" id="f-email" placeholder=" " required><label for="f-email">Email *</label></div>
+        <div class="field">
+          <input type="text" name="name" id="f-name" placeholder=" " required>
+          <label for="f-name">Your Name</label>
         </div>
-        <div class="form-row">
-          <div class="field"><input type="tel" name="phone" id="f-phone" placeholder=" "><label for="f-phone">Phone</label></div>
-          <div class="field"><input type="text" name="event_date" id="f-date" placeholder=" "><label for="f-date">Event Date</label></div>
+        <div class="field">
+          <input type="email" name="email" id="f-email" placeholder=" " required>
+          <label for="f-email">Email Address</label>
         </div>
-        <div class="field"><input type="text" name="event_location" id="f-loc" placeholder=" "><label for="f-loc">Event Location</label></div>
-        <div class="field"><textarea rows="5" name="message" id="f-msg" placeholder=" "></textarea><label for="f-msg">Tell us about your project…</label></div>
-        <button type="submit" class="btn btn-gold btn-block" data-magnetic>Send Enquiry
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
-        </button>
+        <div class="field">
+          <input type="tel" name="phone" id="f-phone" placeholder=" ">
+          <label for="f-phone">Phone Number</label>
+        </div>
+        <div class="field">
+          <input type="text" name="event_date" id="f-date" placeholder=" ">
+          <label for="f-date">Event Date</label>
+        </div>
+        <div class="field">
+          <input type="text" name="event_location" id="f-loc" placeholder=" ">
+          <label for="f-loc">Event Location</label>
+        </div>
+        <div class="field">
+          <textarea rows="4" name="message" id="f-msg" placeholder=" "></textarea>
+          <label for="f-msg">Tell us about your project…</label>
+        </div>
+
+        <button type="submit" class="solid-btn" data-magnetic>Send Enquiry</button>
       </form>
     </div>
   </section>
 
-  <!-- ══════════ Footer ══════════ -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <a href="{% url 'new_designe' %}" class="footer-logo">
-        <img src="{% if site.logo %}{{ site.logo.url }}{% else %}{% static 'logo.png' %}{% endif %}" alt="{{ site.site_name|default:'Sarkari Shooting' }}">
-      </a>
-      <p class="footer-script">Crafted with light &amp; patience</p>
-      <nav class="footer-nav" aria-label="Footer">
-        <a href="#about">About</a>
-        <a href="#services">Services</a>
-        <a href="#portfolio">Portfolio</a>
-        <a href="#pricing">Packages</a>
-        <a href="{% url 'contact' %}">Contact</a>
-      </nav>
-      <div class="footer-social">
-        <a href="{{ site.instagram_url|default:'https://instagram.com/sarkarishooting' }}" target="_blank" rel="noopener" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-        </a>
-        <a href="{{ site.whatsapp_url|default:'https://wa.me/919XXXXXXXXX' }}" target="_blank" rel="noopener" aria-label="WhatsApp">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        </a>
-        <a href="mailto:{{ site.email|default:'info@sarkarishooting.com' }}" aria-label="Email">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 5l10 8 10-8"/></svg>
-        </a>
-        <a href="{{ site.facebook_url|default:'https://facebook.com/sarkarishooting' }}" target="_blank" rel="noopener" aria-label="Facebook">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+  <!-- ────────── Footer ────────── -->
+  <footer class="ss-footer">
+    <div class="footer-content">
+      <!-- Footer monogram with subtle pulsing rings -->
+      <div class="footer-monogram" aria-hidden="true">
+        <span class="footer-rings">
+          <span class="ring r1"></span>
+          <span class="ring r2"></span>
+          <span class="ring r3"></span>
+        </span>
+        <a href="{% url 'new_designe' %}" class="footer-brand" aria-label="{{ site.site_name|default:'Sarkari Shooting' }} home">
+          <img src="{% if site.logo %}{{ site.logo.url }}{% else %}{% static 'logo.png' %}{% endif %}" alt="{{ site.site_name|default:'Sarkari Shooting' }}">
         </a>
       </div>
-      <p class="footer-copy">{{ site.copyright_text|default:"© 2026 Sarkari Shooting. All rights reserved." }}</p>
+
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="#services-section">Services</a>
+        <a href="#portfolio-section">Portfolio</a>
+        <a href="#process-section">Process</a>
+        <a href="#pricing-section">Packages</a>
+        <a href="#testimonials-section">Reviews</a>
+        <a href="{% url 'contact' %}">Contact</a>
+      </nav>
+
+      <div class="footer-social">
+        <a href="{{ site.whatsapp_url|default:'https://wa.me/919XXXXXXXXX' }}" target="_blank" rel="noopener" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+        <a href="mailto:{{ site.email|default:'info@sarkarishooting.com' }}" aria-label="Email">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 4l10 8 10-8"/></svg>
+        </a>
+        <a href="{{ site.instagram_url|default:'https://instagram.com/sarkarishooting' }}" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        </a>
+        <a href="{{ site.facebook_url|default:'https://facebook.com/sarkarishooting' }}" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+      </div>
+
+      <p class="footer-copyright">{{ site.copyright_text }}</p>
     </div>
   </footer>
 
-  <button class="back-top" id="backTop" aria-label="Back to top">
-    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
+  <!-- ────────── Back to Top ────────── -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
   </button>
 
-  <!-- ══════════ Scripts ══════════ -->
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
   <script src="{% static 'new_designe_script.js' %}" defer></script>
-
-  <script type="importmap">
-    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
-  </script>
-  <script type="module" src="{% static 'new_designe_3d.js' %}"></script>
 </body>
 </html>

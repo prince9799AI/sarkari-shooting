@@ -221,6 +221,31 @@ class SiteSection(models.Model):
         return self.section_key
 
 
+class PricingPackage(models.Model):
+    """Packages & pricing tiers shown on the landing page."""
+    TIER_CHOICES = [
+        ("photography", "Photography"),
+        ("cinematography", "Cinematography"),
+    ]
+    name = models.CharField(max_length=100, help_text="e.g. Basic, Standard, Premium")
+    tier = models.CharField(max_length=20, choices=TIER_CHOICES, default="photography")
+    price = models.CharField(max_length=50, help_text="e.g. 45,000 or 1.2L")
+    price_suffix = models.CharField(max_length=30, default="/ package")
+    features = models.TextField(help_text="One feature per line")
+    is_featured = models.BooleanField(default=False)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order"]
+
+    def feature_list(self):
+        """Return features split into a clean list of lines."""
+        return [line.strip() for line in self.features.splitlines() if line.strip()]
+
+    def __str__(self):
+        return f"{self.name} ({self.get_tier_display()})"
+
+
 class Enquiry(models.Model):
     """Contact form enquiries."""
     name = models.CharField(max_length=150)

@@ -17,6 +17,7 @@ from .models import (
     Stat,
     CTABanner,
     SiteSection,
+    PricingPackage,
     Enquiry,
 )
 
@@ -151,6 +152,13 @@ class CTABannerAdmin(admin.ModelAdmin):
 class SiteSectionAdmin(admin.ModelAdmin):
     list_display = ["section_key", "eyebrow_label", "heading", "order"]
     list_editable = ["order"]
+
+
+@admin.register(PricingPackage)
+class PricingPackageAdmin(admin.ModelAdmin):
+    list_display = ["name", "tier", "price", "price_suffix", "is_featured", "order"]
+    list_editable = ["price", "is_featured", "order"]
+    list_filter = ["tier", "is_featured"]
 
 
 @admin.register(Enquiry)

@@ -15,6 +15,7 @@ from .models import (
     Stat,
     CTABanner,
     SiteSection,
+    PricingPackage,
     Enquiry,
 )
 
@@ -87,6 +88,8 @@ class NewDesigneView(View):
             "testimonials": Testimonial.objects.all(),
             "stats": Stat.objects.all(),
             "cta_banners": CTABanner.objects.all(),
+            "pricing_packages": PricingPackage.objects.all(),
+            "section_pricing": get_section("pricing", "Investment", "Packages & Pricing"),
             "section_services": get_section("services", "What We Offer", "Our Creative Services"),
             "section_portfolio": get_section("portfolio", "Our Work", "Featured Portfolio"),
             "section_process": get_section("process", "How We Work", "Our Creative Process"),
