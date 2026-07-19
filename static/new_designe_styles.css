@@ -3511,3 +3511,38 @@ html:not([data-theme="dark"]) .channel-card {
 @media (prefers-reduced-motion: reduce) {
   .film-grain, .cursor-glow { display: none !important; }
 }
+
+/* ====================================================================
+   25. VIDEO SOUND TOGGLE (injected by JS on autoplaying videos)
+   ==================================================================== */
+.vid-sound-btn {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--gold-soft);
+  background: rgba(6, 5, 3, 0.6);
+  border: 1px solid var(--border-glow);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: color 0.3s, background 0.3s, transform 0.3s var(--ease-out);
+}
+
+.vid-sound-btn:hover { color: var(--gold); background: rgba(6, 5, 3, 0.85); transform: scale(1.1); }
+
+.vid-sound-btn .snd-on  { display: none; }
+.vid-sound-btn.is-on .snd-on  { display: block; }
+.vid-sound-btn.is-on .snd-off { display: none; }
+
+/* positioning contexts for each video host */
+.service-tile .tile-media { position: relative; }
+
+.ss-cta-banner .vid-sound-btn { right: 20px; bottom: 20px; }
+
+/* hero: keep clear of the bottom gradient, pagination and arrows */
+.hero-frame .vid-sound-btn { right: 26px; bottom: 96px; }

@@ -134,8 +134,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const setFrameVideo = (frame, playing) => {
       const video = frame.querySelector('video');
       if (!video) return;
-      if (playing) { video.muted = true; video.play().catch(() => {}); }
-      else video.pause();
+      if (playing) {
+        if (!video.dataset.userSound) video.muted = true; /* respect a visitor's unmute */
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
     };
 
     const jumpTo = (idx) => {
@@ -305,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const ambientObs = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.muted = true; /* always silent, even if the file has audio */
+            if (!entry.target.dataset.userSound) entry.target.muted = true; /* silent unless visitor unmuted */
             entry.target.play().catch(() => {});
           } else {
             entry.target.pause();
@@ -317,6 +321,38 @@ document.addEventListener('DOMContentLoaded', () => {
       ambientVideos.forEach((v) => { v.muted = true; v.play().catch(() => {}); });
     }
   }
+
+  /* ===============================================================
+     9a4b. SOUND TOGGLE — every autoplaying video gets a 🔇/🔊
+     button; a click is the user gesture browsers require for audio
+     =============================================================== */
+  document.querySelectorAll('.tile-media-video, .cta-media-video, .hero-media-video').forEach((video) => {
+    const host = video.parentElement;
+    if (!host) return;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'vid-sound-btn';
+    btn.setAttribute('aria-label', 'Unmute video');
+    btn.innerHTML =
+      '<svg class="snd-off" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8">' +
+        '<path d="M11 5L6 9H3v6h3l5 4V5z"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/></svg>' +
+      '<svg class="snd-on" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8">' +
+        '<path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      video.muted = !video.muted;
+      if (video.muted) {
+        delete video.dataset.userSound;
+      } else {
+        video.dataset.userSound = '1';
+        video.play().catch(() => {});
+      }
+      btn.classList.toggle('is-on', !video.muted);
+      btn.setAttribute('aria-label', video.muted ? 'Unmute video' : 'Mute video');
+    });
+    host.appendChild(btn);
+  });
 
   /* ===============================================================
      9a5. FILM DETAIL — gallery/video lightbox + hover previews
