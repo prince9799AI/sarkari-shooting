@@ -13,6 +13,8 @@ from .models import (
     Service,
     PortfolioCategory,
     PortfolioItem,
+    PortfolioItemImage,
+    PortfolioItemVideo,
     Quote,
     ProcessStep,
     Testimonial,
@@ -132,11 +134,43 @@ class PortfolioCategoryAdmin(admin.ModelAdmin):
     item_count.short_description = "Items"
 
 
+class PortfolioItemImageInline(admin.TabularInline):
+    model = PortfolioItemImage
+    extra = 1
+    ordering = ["order"]
+    fields = ["image", "caption", "order", "preview"]
+    readonly_fields = ["preview"]
+
+    def preview(self, obj):
+        if obj.pk and obj.image:
+            return format_html('<img src="{}" width="90" height="60" style="object-fit:cover;border-radius:4px"/>', obj.image.url)
+        return "-"
+
+
+class PortfolioItemVideoInline(admin.TabularInline):
+    model = PortfolioItemVideo
+    extra = 1
+    ordering = ["order"]
+    fields = ["video", "caption", "order", "preview"]
+    readonly_fields = ["preview"]
+
+    def preview(self, obj):
+        if obj.pk and obj.video:
+            return format_html('<video src="{}" width="90" height="60" style="object-fit:cover;border-radius:4px" muted preload="metadata"></video>', obj.video.url)
+        return "-"
+
+
 @admin.register(PortfolioItem)
 class PortfolioItemAdmin(admin.ModelAdmin):
-    list_display = ["title", "category", "meta", "order", "image_preview"]
+    list_display = ["title", "category", "meta", "order", "gallery_count", "image_preview"]
     list_filter = ["category"]
     list_editable = ["order"]
+    inlines = [PortfolioItemImageInline, PortfolioItemVideoInline]
+
+    def gallery_count(self, obj):
+        return f"{obj.gallery_images.count()} img · {obj.gallery_videos.count()} vid"
+
+    gallery_count.short_description = "Gallery"
 
     def image_preview(self, obj):
         if obj.image:
