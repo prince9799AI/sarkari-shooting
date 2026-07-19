@@ -112,8 +112,42 @@ class ContactView(View):
     template_name = "contact.html"
 
     def get(self, request):
-        context = {"site": get_site_settings()}
-        return render(request, self.template_name, context)
+        return render(request, self.template_name, self._build_context())
+
+    def post(self, request):
+        name = request.POST.get("name", "").strip()
+        email = request.POST.get("email", "").strip()
+        phone = request.POST.get("phone", "").strip()
+        event_date = request.POST.get("event_date", "").strip()
+        event_location = request.POST.get("event_location", "").strip()
+        message = request.POST.get("message", "").strip()
+
+        if name and email:
+            Enquiry.objects.create(
+                name=name,
+                email=email,
+                phone=phone,
+                event_date=event_date,
+                event_location=event_location,
+                message=message,
+            )
+            messages.success(request, "Thank you! Your enquiry has been sent. We'll get back to you soon.")
+            return redirect(reverse("contact") + "#contact-form-section")
+        messages.error(request, "Please provide your name and email.")
+        return redirect(reverse("contact") + "#contact-form-section")
+
+    def _build_context(self):
+        site = get_site_settings()
+        instagram_handle = ""
+        if site.instagram_url:
+            clean = site.instagram_url.split("?")[0].rstrip("/")
+            instagram_handle = "@" + clean.rsplit("/", 1)[-1]
+        return {
+            "site": site,
+            "instagram_handle": instagram_handle,
+            "portfolio_categories": PortfolioCategory.objects.all(),
+            "section_contact": get_section("contact", "Reach Out", "Let's Work Together"),
+        }
 
 
 class FilmDetailView(View):
@@ -141,6 +175,7 @@ class FilmDetailView(View):
 
         context = {
             "site": get_site_settings(),
+            "portfolio_categories": PortfolioCategory.objects.all(),
             "film": film,
             "related": related,
             "date": date,

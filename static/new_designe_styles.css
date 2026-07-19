@@ -3546,3 +3546,229 @@ html:not([data-theme="dark"]) .channel-card {
 
 /* hero: keep clear of the bottom gradient, pagination and arrows */
 .hero-frame .vid-sound-btn { right: 26px; bottom: 96px; }
+
+/* ====================================================================
+   26. MEGA FOOTER (shared partial — ContactVerse-inspired)
+   ==================================================================== */
+.mega-footer {
+  position: relative;
+  overflow: hidden;
+  margin-top: var(--gap-2xl);
+  padding: calc(clamp(220px, 30vw, 420px) * 0.62 + 48px) var(--gap-md) 0;
+  background: #050403;
+  border-top: none;
+}
+
+/* faint starfield */
+.mega-footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 8% 12%,  rgba(255,255,255,0.5), transparent 100%),
+    radial-gradient(1px 1px at 22% 32%, rgba(255,255,255,0.3), transparent 100%),
+    radial-gradient(1.5px 1.5px at 37% 8%, rgba(255,255,255,0.42), transparent 100%),
+    radial-gradient(1px 1px at 52% 24%, rgba(255,255,255,0.28), transparent 100%),
+    radial-gradient(1px 1px at 66% 6%,  rgba(255,255,255,0.45), transparent 100%),
+    radial-gradient(1.5px 1.5px at 79% 18%, rgba(255,255,255,0.32), transparent 100%),
+    radial-gradient(1px 1px at 91% 30%, rgba(255,255,255,0.4), transparent 100%),
+    radial-gradient(1px 1px at 14% 52%, rgba(255,255,255,0.2), transparent 100%),
+    radial-gradient(1px 1px at 85% 48%, rgba(255,255,255,0.22), transparent 100%);
+  background-repeat: no-repeat;
+}
+
+/* horizon light arc, like a planet's edge catching sun */
+.mf-horizon {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: clamp(220px, 30vw, 420px);
+  pointer-events: none;
+}
+
+/* wide atmospheric halo above the rim */
+.mf-horizon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(70% 130% at 50% 104%,
+      rgba(244, 234, 210, 0.30) 0%,
+      rgba(230, 207, 142, 0.14) 30%,
+      rgba(208, 175, 90, 0.05) 55%,
+      transparent 75%);
+}
+
+/* the planet rim itself — bright thin curved edge, dark body below */
+.mf-horizon::after {
+  content: '';
+  position: absolute;
+  top: 62%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 165%;
+  height: 340%;
+  border-radius: 50%;
+  background: #060504;
+  border-top: 2px solid rgba(248, 240, 220, 0.85);
+  box-shadow:
+    0 -6px 22px rgba(244, 234, 210, 0.55),
+    0 -22px 70px rgba(230, 207, 142, 0.30),
+    0 -60px 160px rgba(208, 175, 90, 0.16),
+    inset 0 30px 60px rgba(244, 234, 210, 0.08);
+  filter: blur(0.2px);
+}
+
+.mf-columns {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.5fr repeat(4, 1fr);
+  gap: var(--gap-lg);
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.mf-col { display: flex; flex-direction: column; align-items: flex-start; gap: 0.55rem; }
+
+.mf-brand-name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--text-ink);
+}
+
+.mf-brand-tagline {
+  font-family: var(--font-editorial);
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+  max-width: 26ch;
+}
+
+.mf-cta { margin-top: 0.6rem; }
+
+.mf-head {
+  font-family: var(--font-body);
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #f2ede4;
+  margin-bottom: 0.65rem;
+}
+
+.mf-col a {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  transition: color 0.3s, transform 0.3s var(--ease-out);
+}
+
+.mf-col a:hover { color: var(--gold-soft); transform: translateX(3px); }
+
+.mf-text { font-size: 0.86rem; line-height: 1.6; color: var(--text-muted); white-space: pre-line; }
+
+/* giant wordmark — SVG stretches text truly edge-to-edge */
+.mf-wordmark {
+  position: relative;
+  margin-top: clamp(3rem, 7vw, 6rem);
+  user-select: none;
+}
+
+.mf-wordmark svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.mf-wordmark text {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 148px;
+  letter-spacing: 0.02em;
+}
+
+.mf-bottom {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+  flex-wrap: wrap;
+  max-width: 1240px;
+  margin: clamp(1.5rem, 3vw, 2.5rem) auto 0;
+  padding: 1.1rem 0 1.4rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.mf-copyright { font-size: 0.78rem; color: var(--text-muted); }
+
+.mf-social { display: flex; gap: 0.6rem; }
+
+.mf-social a {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+  transition: color 0.3s, border-color 0.3s, transform 0.3s var(--ease-out);
+}
+
+.mf-social a:hover { color: var(--gold); border-color: var(--border-glow); transform: translateY(-3px); }
+
+@media (max-width: 1000px) {
+  .mf-columns { grid-template-columns: repeat(2, 1fr); }
+  .mf-col-brand { grid-column: 1 / -1; }
+}
+
+@media (max-width: 560px) {
+  .mf-columns { grid-template-columns: 1fr 1fr; gap: var(--gap-md); }
+  .mf-wordmark { letter-spacing: 0.02em; }
+  .mf-bottom { flex-direction: column; text-align: center; }
+}
+
+/* ====================================================================
+   27. CONTACT PAGE — dynamic sections
+   ==================================================================== */
+.channel-value {
+  margin-top: 0.5rem;
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+
+.form-messages { max-width: 720px; margin: 0 auto var(--gap-md); }
+
+.form-message {
+  padding: 0.9rem 1.2rem;
+  border: 1px solid var(--border-glow);
+  border-left: 3px solid var(--gold);
+  background: var(--bg-card);
+  font-size: 0.92rem;
+  color: var(--text-light);
+}
+
+.form-message.is-error { border-left-color: var(--cta); }
+
+.studio-map-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 350px;
+  padding: 2rem;
+  text-align: center;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  transition: border-color 0.45s var(--ease-out);
+}
+
+.studio-map-card:hover { border-color: var(--border-glow); }
+
+.studio-map-note { color: var(--text-muted); font-size: 0.9rem; }
