@@ -100,21 +100,30 @@
 
   {% if film.gallery_images.all or film.image %}
   <section class="film-gallery">
-    <div class="section-head">
+    <div class="section-head" data-reveal="fade-up">
       <span class="eyebrow-label">Behind the Scenes</span>
       <h2 class="heading-primary">These Are a Few of the Memories We Made</h2>
+      <span class="head-ornament" aria-hidden="true"></span>
     </div>
-    <div class="film-gallery-grid">
+    <div class="film-gallery-grid" data-reveal="stagger" data-stagger="0.08">
       {% if film.image %}
-      <div class="film-gallery-item">
+      <figure class="film-gallery-item" data-lb="image" data-lb-src="{{ film.image.url }}" data-lb-caption="{{ film.title }}" tabindex="0" role="button" aria-label="View photo — {{ film.title }}">
         <img src="{{ film.image.url }}" alt="{{ film.title }}" loading="lazy">
-      </div>
+        <span class="fg-frame" aria-hidden="true"></span>
+        <span class="fg-zoom" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg>
+        </span>
+      </figure>
       {% endif %}
       {% for img in film.gallery_images.all %}
-      <div class="film-gallery-item">
+      <figure class="film-gallery-item" data-lb="image" data-lb-src="{{ img.image.url }}" data-lb-caption="{{ img.caption|default:film.title }}" tabindex="0" role="button" aria-label="View photo — {{ img.caption|default:film.title }}">
         <img src="{{ img.image.url }}" alt="{% if img.caption %}{{ img.caption }}{% else %}{{ film.title }}{% endif %}" loading="lazy">
-        {% if img.caption %}<span class="film-gallery-caption">{{ img.caption }}</span>{% endif %}
-      </div>
+        <span class="fg-frame" aria-hidden="true"></span>
+        <span class="fg-zoom" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg>
+        </span>
+        {% if img.caption %}<figcaption class="film-gallery-caption">{{ img.caption }}</figcaption>{% endif %}
+      </figure>
       {% endfor %}
     </div>
   </section>
@@ -122,23 +131,48 @@
 
   {% if film.gallery_videos.all %}
   <section class="film-videos" id="film-videos-section">
-    <div class="section-head">
+    <div class="section-head" data-reveal="fade-up">
       <span class="eyebrow-label">Watch</span>
       <h2 class="heading-primary">More Videos</h2>
+      <span class="head-ornament" aria-hidden="true"></span>
     </div>
-    <div class="film-videos-grid">
+    <div class="film-videos-grid" data-reveal="stagger" data-stagger="0.1">
       {% for v in film.gallery_videos.all %}
-      <div class="film-video-item">
-        <video controls preload="metadata" poster="">
-          <source src="{{ v.video.url }}" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
+      <div class="film-video-item" data-lb="video" data-lb-src="{{ v.video.url }}" data-lb-caption="{{ v.caption }}" tabindex="0" role="button" aria-label="Watch — {{ v.caption|default:film.title }}">
+        <div class="fv-frame">
+          <video muted playsinline loop preload="metadata">
+            <source src="{{ v.video.url }}#t=0.4" type="video/mp4">
+          </video>
+          <span class="fv-play" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5.5v13l11-6.5-11-6.5z"/></svg>
+          </span>
+          <span class="fv-shade" aria-hidden="true"></span>
+        </div>
         {% if v.caption %}<p class="film-video-caption">{{ v.caption }}</p>{% endif %}
       </div>
       {% endfor %}
     </div>
   </section>
   {% endif %}
+
+  <!-- Film media lightbox — photos & videos open here -->
+  <div class="film-lightbox" id="filmLightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Media viewer">
+    <div class="film-lightbox-backdrop" data-flb-close></div>
+    <button type="button" class="film-lightbox-close" data-flb-close aria-label="Close">&times;</button>
+    <button type="button" class="film-lightbox-nav is-prev" id="flbPrev" aria-label="Previous">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button type="button" class="film-lightbox-nav is-next" id="flbNext" aria-label="Next">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+    <figure class="film-lightbox-stage">
+      <div class="film-lightbox-media" id="flbMedia"></div>
+      <figcaption class="film-lightbox-meta">
+        <span id="flbCaption"></span>
+        <span class="film-lightbox-counter" id="flbCounter"></span>
+      </figcaption>
+    </figure>
+  </div>
 
   {% if film.testimonial_text %}
   <section class="film-testimonial">

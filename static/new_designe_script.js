@@ -318,6 +318,102 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ===============================================================
+     9a5. FILM DETAIL — gallery/video lightbox + hover previews
+     =============================================================== */
+  const filmLightbox = document.getElementById('filmLightbox');
+  if (filmLightbox) {
+    const flbMedia = document.getElementById('flbMedia');
+    const flbCaption = document.getElementById('flbCaption');
+    const flbCounter = document.getElementById('flbCounter');
+    const flbPrev = document.getElementById('flbPrev');
+    const flbNext = document.getElementById('flbNext');
+
+    /* one collection per media type, in DOM order */
+    const lbItems = { image: [], video: [] };
+    document.querySelectorAll('[data-lb]').forEach((el) => {
+      const type = el.dataset.lb;
+      if (!lbItems[type]) return;
+      el.dataset.lbIdx = lbItems[type].length;
+      lbItems[type].push({ src: el.dataset.lbSrc, caption: el.dataset.lbCaption || '' });
+    });
+
+    let lbType = 'image';
+    let lbIdx = 0;
+
+    const renderLb = () => {
+      const list = lbItems[lbType];
+      const item = list[lbIdx];
+      flbMedia.innerHTML = '';
+      if (lbType === 'video') {
+        const vid = document.createElement('video');
+        vid.src = item.src;
+        vid.controls = true;
+        vid.autoplay = true;
+        vid.playsInline = true;
+        flbMedia.appendChild(vid);
+      } else {
+        const img = document.createElement('img');
+        img.src = item.src;
+        img.alt = item.caption;
+        flbMedia.appendChild(img);
+      }
+      flbCaption.textContent = item.caption;
+      flbCounter.textContent = list.length > 1 ? (lbIdx + 1) + ' / ' + list.length : '';
+      const showNav = list.length > 1 ? '' : 'none';
+      flbPrev.style.display = showNav;
+      flbNext.style.display = showNav;
+    };
+
+    const openLb = (type, idx) => {
+      lbType = type;
+      lbIdx = idx;
+      renderLb();
+      filmLightbox.classList.add('is-open');
+      filmLightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    };
+
+    const closeLb = () => {
+      filmLightbox.classList.remove('is-open');
+      filmLightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      flbMedia.innerHTML = ''; /* stops any playing video */
+    };
+
+    const stepLb = (dir) => {
+      const list = lbItems[lbType];
+      lbIdx = (lbIdx + dir + list.length) % list.length;
+      renderLb();
+    };
+
+    document.querySelectorAll('[data-lb]').forEach((el) => {
+      const activate = () => openLb(el.dataset.lb, parseInt(el.dataset.lbIdx, 10) || 0);
+      el.addEventListener('click', activate);
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
+      });
+    });
+
+    filmLightbox.querySelectorAll('[data-flb-close]').forEach((el) => el.addEventListener('click', closeLb));
+    flbPrev.addEventListener('click', () => stepLb(-1));
+    flbNext.addEventListener('click', () => stepLb(1));
+    document.addEventListener('keydown', (e) => {
+      if (!filmLightbox.classList.contains('is-open')) return;
+      if (e.key === 'Escape') closeLb();
+      if (e.key === 'ArrowLeft') stepLb(-1);
+      if (e.key === 'ArrowRight') stepLb(1);
+    });
+
+    /* hover preview — video cards play muted while hovered */
+    document.querySelectorAll('.film-video-item').forEach((card) => {
+      const vid = card.querySelector('video');
+      if (!vid) return;
+      card.addEventListener('mouseenter', () => { vid.play().catch(() => {}); });
+      card.addEventListener('mouseleave', () => { vid.pause(); vid.currentTime = 0.4; });
+    });
+  }
+
+  /* ===============================================================
      9b. PRICING — Photography / Cinematography tier toggle
      =============================================================== */
   const pricingToggleBtns = document.querySelectorAll('.pricing-toggle-btn');
