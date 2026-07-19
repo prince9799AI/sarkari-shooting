@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const setFrameVideo = (frame, playing) => {
       const video = frame.querySelector('video');
       if (!video) return;
-      if (playing) video.play().catch(() => {});
+      if (playing) { video.muted = true; video.play().catch(() => {}); }
       else video.pause();
     };
 
@@ -296,24 +296,25 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ===============================================================
-     9a4. CTA BANNER VIDEO — starts only when scrolled into view,
-     pauses when scrolled away (battery + bandwidth)
+     9a4. AMBIENT VIDEOS (CTA banner, service tiles) — start only
+     when scrolled into view, pause when scrolled away
      =============================================================== */
-  const ctaVideo = document.querySelector('.cta-media-video');
-  if (ctaVideo) {
+  const ambientVideos = document.querySelectorAll('.cta-media-video, .tile-media-video');
+  if (ambientVideos.length) {
     if ('IntersectionObserver' in window) {
-      const ctaVidObs = new IntersectionObserver((entries) => {
+      const ambientObs = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            ctaVideo.play().catch(() => {});
+            entry.target.muted = true; /* always silent, even if the file has audio */
+            entry.target.play().catch(() => {});
           } else {
-            ctaVideo.pause();
+            entry.target.pause();
           }
         });
       }, { rootMargin: '200px 0px' });
-      ctaVidObs.observe(ctaVideo);
+      ambientVideos.forEach((v) => ambientObs.observe(v));
     } else {
-      ctaVideo.play().catch(() => {});
+      ambientVideos.forEach((v) => { v.muted = true; v.play().catch(() => {}); });
     }
   }
 
@@ -350,6 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
         vid.controls = true;
         vid.autoplay = true;
         vid.playsInline = true;
+        vid.muted = true; /* starts silent — viewer unmutes via controls */
         flbMedia.appendChild(vid);
       } else {
         const img = document.createElement('img');
@@ -408,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.film-video-item').forEach((card) => {
       const vid = card.querySelector('video');
       if (!vid) return;
-      card.addEventListener('mouseenter', () => { vid.play().catch(() => {}); });
+      card.addEventListener('mouseenter', () => { vid.muted = true; vid.play().catch(() => {}); });
       card.addEventListener('mouseleave', () => { vid.pause(); vid.currentTime = 0.4; });
     });
   }
@@ -694,6 +696,117 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 700);
     });
   });
+
+  /* ===============================================================
+     19b. DEPTH & ATMOSPHERE — 3D tilt, hero parallax, cursor glow,
+     film grain. Pure transforms, no libraries. Auto-disabled on
+     touch devices and for prefers-reduced-motion.
+     =============================================================== */
+  const finePointer = window.matchMedia('(pointer: fine)').matches;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* — animated film grain overlay (all devices, imperceptibly cheap) — */
+  if (!reducedMotion) {
+    const grain = document.createElement('div');
+    grain.className = 'film-grain';
+    grain.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(grain);
+  }
+
+  if (finePointer && !reducedMotion) {
+    /* — cursor glow: soft gold light that trails the pointer — */
+    const glow = document.createElement('div');
+    glow.className = 'cursor-glow';
+    glow.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(glow);
+
+    let glowX = window.innerWidth / 2, glowY = window.innerHeight / 3;
+    let glowTX = glowX, glowTY = glowY;
+    window.addEventListener('pointermove', (e) => { glowTX = e.clientX; glowTY = e.clientY; }, { passive: true });
+    (function glowLoop() {
+      glowX += (glowTX - glowX) * 0.1;
+      glowY += (glowTY - glowY) * 0.1;
+      glow.style.transform = 'translate3d(' + (glowX - 280) + 'px,' + (glowY - 280) + 'px,0)';
+      requestAnimationFrame(glowLoop);
+    })();
+
+    /* — 3D tilt with gold glare on the site's card surfaces — */
+    const TILT_MAX = 6; /* degrees */
+    const tiltTargets = document.querySelectorAll(
+      '.service-tile, .pricing-card, .ig-card, .portfolio-item, .review-card, .film-gallery-item, .film-video-item'
+    );
+
+    tiltTargets.forEach((el) => {
+      el.classList.add('has-tilt');
+      const glare = document.createElement('span');
+      glare.className = 'tilt-glare';
+      glare.setAttribute('aria-hidden', 'true');
+      el.appendChild(glare);
+
+      const s = { rx: 0, ry: 0, tx: 0, ty: 0, hover: false, raf: null };
+
+      const tick = () => {
+        s.rx += (s.tx - s.rx) * 0.16;
+        s.ry += (s.ty - s.ry) * 0.16;
+        const settled = Math.abs(s.rx - s.tx) < 0.03 && Math.abs(s.ry - s.ty) < 0.03;
+        el.style.transform =
+          'perspective(900px) rotateX(' + s.rx.toFixed(2) + 'deg) rotateY(' + s.ry.toFixed(2) + 'deg)' +
+          (s.hover ? ' translateY(-6px)' : '');
+        if (!settled || s.hover) {
+          s.raf = requestAnimationFrame(tick);
+        } else {
+          s.raf = null;
+          if (!s.hover) el.style.transform = ''; /* hand back to CSS */
+        }
+      };
+
+      const start = () => { if (!s.raf) s.raf = requestAnimationFrame(tick); };
+
+      el.addEventListener('pointerenter', () => { s.hover = true; start(); });
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        const nx = (e.clientX - r.left) / r.width - 0.5;   /* -0.5 … 0.5 */
+        const ny = (e.clientY - r.top) / r.height - 0.5;
+        s.ty = nx * TILT_MAX * 2;
+        s.tx = -ny * TILT_MAX * 2;
+        el.style.setProperty('--mx', ((nx + 0.5) * 100).toFixed(1) + '%');
+        el.style.setProperty('--my', ((ny + 0.5) * 100).toFixed(1) + '%');
+      }, { passive: true });
+      el.addEventListener('pointerleave', () => { s.hover = false; s.tx = 0; s.ty = 0; start(); });
+    });
+
+    /* — hero depth: text block leans gently toward the cursor — */
+    const heroDepth = document.getElementById('heroSection');
+    if (heroDepth) {
+      let hx = 0, hy = 0, htx = 0, hty = 0, heroRaf = null;
+
+      const heroTick = () => {
+        hx += (htx - hx) * 0.08;
+        hy += (hty - hy) * 0.08;
+        const block = heroDepth.querySelector('.hero-frame.is-active .hero-text-block');
+        if (block) {
+          block.style.transform =
+            'perspective(900px) rotateY(' + (hx * 2).toFixed(2) + 'deg) rotateX(' + (-hy * 2).toFixed(2) + 'deg)' +
+            ' translate3d(' + (hx * 12).toFixed(1) + 'px,' + (hy * 9).toFixed(1) + 'px,0)';
+        }
+        if (Math.abs(hx - htx) > 0.002 || Math.abs(hy - hty) > 0.002) {
+          heroRaf = requestAnimationFrame(heroTick);
+        } else {
+          heroRaf = null;
+        }
+      };
+
+      const heroStart = () => { if (!heroRaf) heroRaf = requestAnimationFrame(heroTick); };
+
+      heroDepth.addEventListener('pointermove', (e) => {
+        const r = heroDepth.getBoundingClientRect();
+        htx = (e.clientX - r.left) / r.width - 0.5;
+        hty = (e.clientY - r.top) / r.height - 0.5;
+        heroStart();
+      }, { passive: true });
+      heroDepth.addEventListener('pointerleave', () => { htx = 0; hty = 0; heroStart(); });
+    }
+  }
 
   /* ===============================================================
      20. SMOOTH ANCHOR SCROLL (offset for sticky nav)

@@ -27,24 +27,30 @@ from .models import (
 )
 
 
+ALLOWED_MEDIA_EXTENSIONS = (".jpg", ".jpeg", ".png", ".webp", ".gif") + VIDEO_EXTENSIONS
+
+
+def validate_media_upload(f):
+    """Shared image-or-video upload validation for admin forms."""
+    if f and hasattr(f, "name") and not f.name.lower().endswith(ALLOWED_MEDIA_EXTENSIONS):
+        raise forms.ValidationError("Unsupported file type. Use jpg, png, webp, gif, mp4, webm or mov.")
+    return f
+
+
 class MediaFileFormMixin:
-    """Validates that `image` is an image or video file. Used by models whose
-    `image` field accepts both."""
-    ALLOWED_EXTENSIONS = (".jpg", ".jpeg", ".png", ".webp", ".gif") + VIDEO_EXTENSIONS
+    """Labels + validates a media field that accepts image OR video."""
+    MEDIA_FIELD = "image"
     MEDIA_LABEL = "Image or video"
     MEDIA_HELP = "Upload an image (jpg/png/webp/gif) or a video (mp4/webm/mov). Videos play muted on loop."
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if "image" in self.fields:
-            self.fields["image"].label = self.MEDIA_LABEL
-            self.fields["image"].help_text = self.MEDIA_HELP
+        if self.MEDIA_FIELD in self.fields:
+            self.fields[self.MEDIA_FIELD].label = self.MEDIA_LABEL
+            self.fields[self.MEDIA_FIELD].help_text = self.MEDIA_HELP
 
     def clean_image(self):
-        f = self.cleaned_data.get("image")
-        if f and hasattr(f, "name") and not f.name.lower().endswith(self.ALLOWED_EXTENSIONS):
-            raise forms.ValidationError("Unsupported file type. Use jpg, png, webp, gif, mp4, webm or mov.")
-        return f
+        return validate_media_upload(self.cleaned_data.get("image"))
 
 
 class CTABannerForm(MediaFileFormMixin, forms.ModelForm):
@@ -59,6 +65,18 @@ class HeroSlideForm(MediaFileFormMixin, forms.ModelForm):
     class Meta:
         model = HeroSlide
         fields = "__all__"
+
+
+class ServiceForm(MediaFileFormMixin, forms.ModelForm):
+    MEDIA_FIELD = "icon"
+    MEDIA_HELP = "Upload an image (jpg/png/webp/gif) or a video (mp4/webm/mov). A video autoplays muted inside the service card."
+
+    class Meta:
+        model = Service
+        fields = "__all__"
+
+    def clean_icon(self):
+        return validate_media_upload(self.cleaned_data.get("icon"))
 
 
 @admin.register(SiteSettings)
@@ -104,15 +122,25 @@ class BrandStatementAdmin(admin.ModelAdmin):
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ["name", "tag", "order", "icon_preview"]
+    form = ServiceForm
+    list_display = ["name", "tag", "media_kind", "order", "icon_preview"]
     list_editable = ["order"]
 
-    def icon_preview(self, obj):
-        if obj.icon:
-            return format_html('<img src="{}" width="40" height="40" style="object-fit:contain"/>', obj.icon.url)
-        return "-"
+    def media_kind(self, obj):
+        if not obj.icon:
+            return "-"
+        return "Video" if obj.is_video() else "Image"
 
-    icon_preview.short_description = "Icon"
+    media_kind.short_description = "Type"
+
+    def icon_preview(self, obj):
+        if not obj.icon:
+            return "-"
+        if obj.is_video():
+            return format_html('<video src="{}" width="60" height="45" style="object-fit:cover;border-radius:4px" muted preload="metadata"></video>', obj.icon.url)
+        return format_html('<img src="{}" width="60" height="45" style="object-fit:cover;border-radius:4px"/>', obj.icon.url)
+
+    icon_preview.short_description = "Preview"
 
 
 class PortfolioItemInline(admin.TabularInline):

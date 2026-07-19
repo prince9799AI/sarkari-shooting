@@ -190,9 +190,13 @@
     <div class="services-mosaic" data-reveal="stagger" data-stagger="0.12">
       {% for service in services %}
       <article class="service-tile" data-animate data-reveal-child>
-        <div class="tile-icon">
-          {% if service.icon %}
-          <img src="{{ service.icon.url }}" alt="{{ service.name }}" width="48" height="48" loading="lazy" style="object-fit: contain;">
+        <div class="tile-icon{% if service.icon %} tile-media{% endif %}">
+          {% if service.icon and service.is_video %}
+          <video class="tile-media-video" muted loop playsinline preload="none" aria-hidden="true">
+            <source src="{{ service.icon.url }}">
+          </video>
+          {% elif service.icon %}
+          <img src="{{ service.icon.url }}" alt="{{ service.name }}" loading="lazy">
           {% else %}
           <svg viewBox="0 0 48 48" width="48" height="48" aria-hidden="true"><rect x="4" y="10" width="40" height="28" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="24" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="24" r="3" fill="currentColor"/></svg>
           {% endif %}

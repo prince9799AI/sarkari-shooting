@@ -62,8 +62,8 @@ class BrandStatement(models.Model):
 
 
 class Service(models.Model):
-    """Creative services offered."""
-    icon = models.ImageField(upload_to="services/", blank=True, null=True)
+    """Creative services offered. `icon` accepts an image OR a video file."""
+    icon = models.FileField(upload_to="services/", blank=True, null=True)
     tag = models.CharField(max_length=100)
     name = models.CharField(max_length=150)
     description = models.TextField()
@@ -71,6 +71,9 @@ class Service(models.Model):
 
     class Meta:
         ordering = ["order"]
+
+    def is_video(self):
+        return bool(self.icon) and self.icon.name.lower().endswith(VIDEO_EXTENSIONS)
 
     def __str__(self):
         return self.name
