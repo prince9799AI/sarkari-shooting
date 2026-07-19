@@ -16,6 +16,7 @@ from .models import (
     CTABanner,
     SiteSection,
     PricingPackage,
+    InstagramPost,
     Enquiry,
 )
 
@@ -77,7 +78,13 @@ class NewDesigneView(View):
 
     def _build_context(self):
         site = get_site_settings()
+        instagram_handle = ""
+        if site.instagram_url:
+            # tolerate pasted share links: strip ?igsh=... and trailing slash
+            clean = site.instagram_url.split("?")[0].rstrip("/")
+            instagram_handle = "@" + clean.rsplit("/", 1)[-1]
         return {
+            "instagram_handle": instagram_handle,
             "site": site,
             "hero_slides": HeroSlide.objects.all(),
             "brand_statements": BrandStatement.objects.all(),
@@ -89,7 +96,10 @@ class NewDesigneView(View):
             "stats": Stat.objects.all(),
             "cta_banners": CTABanner.objects.all(),
             "pricing_packages": PricingPackage.objects.all(),
+            "instagram_posts": InstagramPost.objects.all(),
+            "popup_quote": Quote.objects.first(),
             "section_pricing": get_section("pricing", "Investment", "Packages & Pricing"),
+            "section_instagram": get_section("instagram", "Moments In Motion", "From Our Instagram"),
             "section_services": get_section("services", "What We Offer", "Our Creative Services"),
             "section_portfolio": get_section("portfolio", "Our Work", "Featured Portfolio"),
             "section_process": get_section("process", "How We Work", "Our Creative Process"),

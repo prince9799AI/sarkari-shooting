@@ -6,7 +6,7 @@
 
 /* ── Apply saved theme before paint (no flash) ── */
 (function () {
-  const saved = localStorage.getItem('ss-theme') || 'light';
+  const saved = localStorage.getItem('ss-theme') || 'dark';
   document.documentElement.setAttribute('data-theme', saved);
 })();
 
@@ -38,40 +38,20 @@ document.addEventListener('DOMContentLoaded', () => {
      - Exits at ~3.6s with scale-fade
      =============================================================== */
   const splash = document.getElementById('ssSplash');
-  const petalsHost = document.getElementById('splashPetals');
-
-  const renderPetals = () => {
-    if (!petalsHost) return;
-    const palette = [
-      'var(--blush)',
-      'var(--blush-deep)',
-      'var(--champagne)',
-      'var(--gold-soft)'
-    ];
-    const count = 22;
-    for (let i = 0; i < count; i++) {
-      const petal = document.createElement('span');
-      petal.className = 'petal';
-      const size = 5 + Math.random() * 9;
-      petal.style.left = Math.random() * 100 + 'vw';
-      petal.style.width = size + 'px';
-      petal.style.height = size * 1.4 + 'px';
-      petal.style.background = palette[Math.floor(Math.random() * palette.length)];
-      petal.style.animationDuration = 5 + Math.random() * 6 + 's';
-      petal.style.animationDelay = Math.random() * 4 + 's';
-      petal.style.opacity = (0.4 + Math.random() * 0.4).toFixed(2);
-      petalsHost.appendChild(petal);
-    }
-  };
 
   if (splash) {
-    document.body.classList.add('is-splash-active');
-    renderPetals();
-    setTimeout(() => splash.classList.add('is-leaving'), 3500);
-    setTimeout(() => {
+    /* brief brand mark on first visit of the session; skipped after */
+    if (sessionStorage.getItem('ss-splash-seen')) {
       splash.classList.add('is-hidden');
-      document.body.classList.remove('is-splash-active');
-    }, 4400);
+    } else {
+      sessionStorage.setItem('ss-splash-seen', '1');
+      document.body.classList.add('is-splash-active');
+      setTimeout(() => splash.classList.add('is-leaving'), 1800);
+      setTimeout(() => {
+        splash.classList.add('is-hidden');
+        document.body.classList.remove('is-splash-active');
+      }, 2600);
+    }
   }
 
   /* ===============================================================
@@ -151,12 +131,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const pips = pagination.querySelectorAll('.pip');
 
+    const setFrameVideo = (frame, playing) => {
+      const video = frame.querySelector('video');
+      if (!video) return;
+      if (playing) video.play().catch(() => {});
+      else video.pause();
+    };
+
     const jumpTo = (idx) => {
+      setFrameVideo(heroFrames[activeIdx], false);
       heroFrames[activeIdx].classList.remove('is-active');
       pips[activeIdx].classList.remove('is-active');
       activeIdx = (idx + heroFrames.length) % heroFrames.length;
       heroFrames[activeIdx].classList.add('is-active');
       pips[activeIdx].classList.add('is-active');
+      setFrameVideo(heroFrames[activeIdx], true);
       runHeroLetterReveal(heroFrames[activeIdx].querySelector('[data-letter-reveal]'));
       restartAuto();
     };
@@ -171,6 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (prevBtn) prevBtn.addEventListener('click', () => jumpTo(activeIdx - 1));
     if (nextBtn) nextBtn.addEventListener('click', () => jumpTo(activeIdx + 1));
 
+    setFrameVideo(heroFrames[activeIdx], true); /* Safari can ignore autoplay attr */
     restartAuto();
   }
 
@@ -210,6 +200,122 @@ document.addEventListener('DOMContentLoaded', () => {
       if (target) target.classList.add('is-shown');
     });
   });
+
+  /* ===============================================================
+     9a2. INSTAGRAM — click-to-load embeds in a lightbox
+     ---------------------------------------------------------------
+     The Instagram iframe is created ONLY when a card is clicked and
+     destroyed on close, so embeds cost nothing at page load.
+     =============================================================== */
+  const igLightbox = document.getElementById('igLightbox');
+  if (igLightbox) {
+    const igFrame = document.getElementById('igLightboxFrame');
+
+    const igOpen = (embedUrl) => {
+      igLightbox.classList.add('is-open');
+      igLightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      const iframe = document.createElement('iframe');
+      iframe.src = embedUrl;
+      iframe.title = 'Instagram post';
+      iframe.setAttribute('allowfullscreen', '');
+      iframe.setAttribute('allow', 'autoplay; encrypted-media');
+      igFrame.appendChild(iframe);
+    };
+
+    const igClose = () => {
+      igLightbox.classList.remove('is-open');
+      igLightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      const iframe = igFrame.querySelector('iframe');
+      if (iframe) iframe.remove(); /* stops playback, frees memory */
+    };
+
+    document.querySelectorAll('.ig-card[data-embed]').forEach((card) => {
+      card.addEventListener('click', () => igOpen(card.dataset.embed));
+    });
+
+    /* in-card live previews — iframe src is set only when the card
+       nears the viewport, so page load stays untouched */
+    const liveFrames = document.querySelectorAll('iframe.ig-live[data-src]');
+    if ('IntersectionObserver' in window) {
+      const liveObs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const frame = entry.target;
+          frame.src = frame.dataset.src;
+          frame.removeAttribute('data-src');
+          liveObs.unobserve(frame);
+        });
+      }, { rootMargin: '400px 0px' });
+      liveFrames.forEach((frame) => liveObs.observe(frame));
+    } else {
+      liveFrames.forEach((frame) => { frame.src = frame.dataset.src; });
+    }
+    igLightbox.querySelectorAll('[data-ig-close]').forEach((el) => el.addEventListener('click', igClose));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && igLightbox.classList.contains('is-open')) igClose();
+    });
+  }
+
+  /* ===============================================================
+     9a3. ENQUIRY POPUP — once per session, dwell or exit-intent
+     =============================================================== */
+  const enquiryPopup = document.getElementById('enquiryPopup');
+  if (enquiryPopup && !sessionStorage.getItem('ss-popup-shown')) {
+    let popupShown = false;
+    let dwellTimer;
+
+    const showPopup = () => {
+      if (popupShown) return;
+      popupShown = true;
+      sessionStorage.setItem('ss-popup-shown', '1');
+      clearTimeout(dwellTimer);
+      enquiryPopup.classList.add('is-open');
+      enquiryPopup.setAttribute('aria-hidden', 'false');
+    };
+
+    const hidePopup = () => {
+      enquiryPopup.classList.remove('is-open');
+      enquiryPopup.setAttribute('aria-hidden', 'true');
+    };
+
+    dwellTimer = setTimeout(showPopup, 12000);
+
+    /* exit intent — cursor leaves through the top of the viewport */
+    document.addEventListener('mouseout', (e) => {
+      if (!e.relatedTarget && e.clientY <= 10) showPopup();
+    });
+
+    enquiryPopup.querySelectorAll('[data-popup-close]').forEach((el) => el.addEventListener('click', hidePopup));
+    const popupCta = document.getElementById('enquiryPopupCta');
+    if (popupCta) popupCta.addEventListener('click', hidePopup);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && enquiryPopup.classList.contains('is-open')) hidePopup();
+    });
+  }
+
+  /* ===============================================================
+     9a4. CTA BANNER VIDEO — starts only when scrolled into view,
+     pauses when scrolled away (battery + bandwidth)
+     =============================================================== */
+  const ctaVideo = document.querySelector('.cta-media-video');
+  if (ctaVideo) {
+    if ('IntersectionObserver' in window) {
+      const ctaVidObs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            ctaVideo.play().catch(() => {});
+          } else {
+            ctaVideo.pause();
+          }
+        });
+      }, { rootMargin: '200px 0px' });
+      ctaVidObs.observe(ctaVideo);
+    } else {
+      ctaVideo.play().catch(() => {});
+    }
+  }
 
   /* ===============================================================
      9b. PRICING — Photography / Cinematography tier toggle

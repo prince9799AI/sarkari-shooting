@@ -1,8 +1,9 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
+  <script>try{var t=localStorage.getItem('ss-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="{{ site.site_name|default:'Sarkari Shooting' }} — luxury cinematography & photography crafting cinematic visual stories.">
   <title>{{ site.site_name|default:"Sarkari Shooting" }} | Cinematography &amp; Photography</title>
@@ -22,9 +23,6 @@
 
   <!-- ────────── Splash / Flash Screen ────────── -->
   <div class="ss-splash" id="ssSplash" aria-hidden="true">
-    <!-- Floating petals (rendered via JS) -->
-    <div class="splash-petals" id="splashPetals"></div>
-
     <div class="splash-stage">
       <!-- Pulsing concentric rings -->
       <div class="splash-rings" aria-hidden="true">
@@ -67,6 +65,7 @@
       </a>
       <nav class="nav-menu" id="navMenu" aria-label="Primary">
         <a href="#services-section">Services</a>
+        <a href="#instagram-section">Highlights</a>
         <a href="#portfolio-section">Portfolio</a>
         <a href="#process-section">Process</a>
         <a href="#pricing-section">Packages</a>
@@ -88,6 +87,7 @@
   <div class="mobile-menu-overlay" id="ssMobileMenu" aria-hidden="true">
     <ul class="mobile-menu-list">
       <li><a href="#services-section">Services</a></li>
+      <li><a href="#instagram-section">Highlights</a></li>
       <li><a href="#portfolio-section">Portfolio</a></li>
       <li><a href="#process-section">Process</a></li>
       <li><a href="#pricing-section">Packages</a></li>
@@ -108,7 +108,14 @@
     <div class="hero-slide-container">
       {% for slide in hero_slides %}
       <div class="hero-frame {% if forloop.first %}is-active{% endif %}" data-idx="{{ forloop.counter0 }}">
+        {% if slide.image and slide.is_video %}
+        <video class="hero-media-video" muted loop playsinline aria-hidden="true"
+               {% if forloop.first %}autoplay preload="auto"{% else %}preload="none"{% endif %}>
+          <source src="{{ slide.image.url }}">
+        </video>
+        {% else %}
         <img src="{% if slide.image %}{{ slide.image.url }}{% else %}https://images.unsplash.com/photo-1505932794465-147d1f1b2c97?w=1920&q=80{% endif %}" alt="{{ slide.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+        {% endif %}
         <div class="hero-text-block">
           <span class="hero-eyebrow"><span class="hero-eyebrow-dash"></span>{{ slide.location }}</span>
           <span class="hero-date">{{ slide.date }}</span>
@@ -185,7 +192,7 @@
       <article class="service-tile" data-animate data-reveal-child>
         <div class="tile-icon">
           {% if service.icon %}
-          <img src="{{ service.icon.url }}" alt="{{ service.name }}" width="48" height="48" style="object-fit: contain;">
+          <img src="{{ service.icon.url }}" alt="{{ service.name }}" width="48" height="48" loading="lazy" style="object-fit: contain;">
           {% else %}
           <svg viewBox="0 0 48 48" width="48" height="48" aria-hidden="true"><rect x="4" y="10" width="40" height="28" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="24" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="24" r="3" fill="currentColor"/></svg>
           {% endif %}
@@ -198,6 +205,69 @@
       {% endfor %}
     </div>
   </section>
+
+  <!-- ────────── Instagram Highlights ────────── -->
+  {% if instagram_posts %}
+  <section class="ss-instagram" id="instagram-section">
+    <div class="section-head" data-reveal="fade-up">
+      <span class="eyebrow-label">{{ section_instagram.0 }}</span>
+      <h2 class="heading-primary">{{ section_instagram.1 }}</h2>
+      <span class="head-ornament" aria-hidden="true"></span>
+    </div>
+
+    <div class="ig-grid" data-reveal="stagger" data-stagger="0.08">
+      {% for post in instagram_posts %}
+      {% if post.embed_url %}
+      <button type="button" class="ig-card" data-reveal-child data-embed="{{ post.embed_url }}" data-caption="{{ post.caption }}" aria-label="Play {{ post.caption|default:'Instagram post' }}">
+      {% else %}
+      <a class="ig-card" data-reveal-child href="{{ post.link|default:site.instagram_url }}" target="_blank" rel="noopener">
+      {% endif %}
+        <span class="ig-thumb">
+          {% if post.image %}
+          <img src="{{ post.image.url }}" alt="{{ post.caption }}" loading="lazy" width="600" height="750">
+          {% elif post.embed_url %}
+          <iframe class="ig-live" data-src="{{ post.embed_url }}" title="{{ post.caption|default:'Instagram preview' }}" scrolling="no" tabindex="-1"></iframe>
+          <span class="ig-live-veil" aria-hidden="true"></span>
+          {% else %}
+          <span class="ig-thumb-blank" aria-hidden="true"></span>
+          {% endif %}
+        </span>
+        <span class="ig-kind" aria-hidden="true">
+          {% if post.media_kind == 'reel' or post.media_kind == 'video' %}
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8 5.5v13l11-6.5-11-6.5z"/></svg>
+          {% else %}
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>
+          {% endif %}
+        </span>
+        <span class="ig-caption">{{ post.caption }}</span>
+      {% if post.embed_url %}
+      </button>
+      {% else %}
+      </a>
+      {% endif %}
+      {% endfor %}
+    </div>
+
+    {% if site.instagram_url %}
+    <div class="ig-follow" data-reveal="fade-up">
+      <a href="{{ site.instagram_url }}" target="_blank" rel="noopener" class="outline-btn" data-magnetic>
+        View All On Instagram{% if instagram_handle %} · {{ instagram_handle }}{% endif %}
+      </a>
+    </div>
+    {% endif %}
+  </section>
+
+  <!-- Instagram lightbox — iframe is injected ONLY on click (zero load-time cost) -->
+  <div class="ig-lightbox" id="igLightbox" aria-hidden="true" role="dialog" aria-label="Instagram post">
+    <div class="ig-lightbox-backdrop" data-ig-close></div>
+    <div class="ig-lightbox-shell">
+      <button type="button" class="ig-lightbox-close" data-ig-close aria-label="Close">&times;</button>
+      <div class="ig-lightbox-frame" id="igLightboxFrame">
+        <span class="ig-lightbox-spinner" aria-hidden="true"></span>
+      </div>
+    </div>
+  </div>
+  {% endif %}
 
   <!-- ────────── Portfolio Gallery ────────── -->
   <section class="ss-portfolio" id="portfolio-section">
@@ -353,7 +423,13 @@
   <section class="ss-cta-banner">
     {% with cta=cta_banners|first %}
     {% if cta %}
+    {% if cta.image and cta.is_video %}
+    <video class="cta-media-video" muted loop playsinline preload="none" aria-hidden="true">
+      <source src="{{ cta.image.url }}">
+    </video>
+    {% else %}
     <img src="{% if cta.image %}{{ cta.image.url }}{% else %}https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80{% endif %}" alt="{{ cta.heading }}" loading="lazy">
+    {% endif %}
     <div class="cta-content" data-reveal="fade-up">
       <span class="cta-eyebrow">&mdash; Let's collaborate &mdash;</span>
       <h2>{{ cta.heading }}</h2>
@@ -444,12 +520,13 @@
           <span class="ring r3"></span>
         </span>
         <a href="{% url 'new_designe' %}" class="footer-brand" aria-label="{{ site.site_name|default:'Sarkari Shooting' }} home">
-          <img src="{% if site.logo %}{{ site.logo.url }}{% else %}{% static 'logo.png' %}{% endif %}" alt="{{ site.site_name|default:'Sarkari Shooting' }}">
+          <img src="{% if site.logo %}{{ site.logo.url }}{% else %}{% static 'logo.png' %}{% endif %}" alt="{{ site.site_name|default:'Sarkari Shooting' }}" loading="lazy">
         </a>
       </div>
 
       <nav class="footer-nav" aria-label="Footer">
         <a href="#services-section">Services</a>
+        <a href="#instagram-section">Highlights</a>
         <a href="#portfolio-section">Portfolio</a>
         <a href="#process-section">Process</a>
         <a href="#pricing-section">Packages</a>
@@ -482,6 +559,27 @@
       <path d="M18 15l-6-6-6 6"/>
     </svg>
   </button>
+
+  <!-- ────────── Enquiry Quote Popup (once per session: dwell or exit-intent) ────────── -->
+  <div class="enquiry-popup" id="enquiryPopup" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Enquire with us">
+    <div class="enquiry-popup-backdrop" data-popup-close></div>
+    <div class="enquiry-popup-card">
+      <button type="button" class="enquiry-popup-close" data-popup-close aria-label="Close">&times;</button>
+      <span class="enquiry-popup-ornament" aria-hidden="true"></span>
+      <span class="enquiry-popup-eyebrow">A Note From Us</span>
+      <blockquote class="enquiry-popup-quote">
+        {% if popup_quote %}“{{ popup_quote.text }}”{% else %}“Nothing is ever lost, so long as it is remembered — let us film your story.”{% endif %}
+      </blockquote>
+      {% if popup_quote and popup_quote.author %}
+      <cite class="enquiry-popup-author">— {{ popup_quote.author }}</cite>
+      {% endif %}
+      <p class="enquiry-popup-text">Dates for this season are filling quickly. Tell us about your celebration and we'll craft something unforgettable.</p>
+      <div class="enquiry-popup-actions">
+        <a href="#contact-section" class="solid-btn" id="enquiryPopupCta">Enquire Now</a>
+        <button type="button" class="enquiry-popup-later" data-popup-close>Maybe later</button>
+      </div>
+    </div>
+  </div>
 
   <script src="{% static 'new_designe_script.js' %}" defer></script>
 </body>

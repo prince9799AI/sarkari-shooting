@@ -97,13 +97,13 @@
    2. DESIGN TOKENS — DARK (cinema room)
    ==================================================================== */
 [data-theme="dark"] {
-  --bg-primary:    #14110e;
-  --bg-secondary:  #1c1916;
-  --bg-surface:    #221e18;
-  --bg-card:       rgba(34, 30, 24, 0.7);
+  --bg-primary:    #0b0a08;
+  --bg-secondary:  #121009;
+  --bg-surface:    #191610;
+  --bg-card:       rgba(25, 22, 16, 0.72);
 
-  --gold:          #d4b85d;
-  --gold-soft:     #e8d68a;
+  --gold:          #d0af5a;
+  --gold-soft:     #e6cf8e;
   --gold-deep:     #a98a35;
   --accent:        #c8b89a;
   --accent-light:  #ddd1bc;
@@ -124,17 +124,17 @@
   --text-white:    #f8f5f0;
   --text-ink:      #f5efe2;
 
-  --overlay-dark:  rgba(10, 8, 6, 0.74);
-  --overlay-hero:  rgba(15, 12, 10, 0.48);
-  --border-subtle: rgba(212, 184, 93, 0.12);
-  --border-glow:   rgba(212, 184, 93, 0.32);
+  --overlay-dark:  rgba(6, 5, 3, 0.76);
+  --overlay-hero:  rgba(8, 7, 5, 0.48);
+  --border-subtle: rgba(208, 175, 90, 0.12);
+  --border-glow:   rgba(208, 175, 90, 0.34);
 
-  --nav-bg:           rgba(15, 12, 10, 0.92);
-  --nav-shadow:       rgba(0, 0, 0, 0.4);
-  --mobile-bg:        rgba(15, 12, 10, 0.97);
-  --hero-gradient-top: rgba(10, 8, 6, 0.45);
-  --hero-gradient-mid: rgba(10, 8, 6, 0.1);
-  --hero-gradient-bot: rgba(10, 8, 6, 0.82);
+  --nav-bg:           rgba(9, 8, 6, 0.92);
+  --nav-shadow:       rgba(0, 0, 0, 0.5);
+  --mobile-bg:        rgba(9, 8, 6, 0.97);
+  --hero-gradient-top: rgba(6, 5, 3, 0.45);
+  --hero-gradient-mid: rgba(6, 5, 3, 0.1);
+  --hero-gradient-bot: rgba(6, 5, 3, 0.85);
   --hero-text-sub:     rgba(248, 245, 240, 0.82);
   --card-shadow:       rgba(0, 0, 0, 0.4);
   --input-bg:          transparent;
@@ -339,33 +339,6 @@ ul  { list-style: none; }
 
 @keyframes splashCueBounce { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
 @keyframes splashArrowBob  { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
-
-/* — falling petals — */
-.splash-petals {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.splash-petals .petal {
-  position: absolute;
-  top: -30px;
-  width: 8px;
-  height: 12px;
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  background: var(--blush);
-  opacity: 0.55;
-  filter: blur(0.3px);
-  animation: petalFall linear infinite;
-}
-
-@keyframes petalFall {
-  0%   { transform: translateY(-30px) rotate(0deg);  opacity: 0; }
-  10%  { opacity: 0.7; }
-  100% { transform: translateY(110vh) rotate(540deg); opacity: 0; }
-}
-
 
 /* ====================================================================
    7. NAVIGATION
@@ -583,6 +556,12 @@ ul  { list-style: none; }
 }
 
 .hero-frame.is-active img { transform: scale(1); }
+
+.hero-frame .hero-media-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 /* Cinematic gradient overlay */
 .hero-frame::after {
@@ -1221,6 +1200,394 @@ ul  { list-style: none; }
 }
 
 /* ====================================================================
+   11c. INSTAGRAM HIGHLIGHTS
+   ==================================================================== */
+.ss-instagram {
+  padding: var(--gap-2xl) var(--gap-md);
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.ss-instagram .section-head {
+  text-align: center;
+  margin-bottom: var(--gap-xl);
+}
+
+.ig-grid {
+  display: grid;
+  /* auto-fit + centered: looks intentional with 2 cards or 12 */
+  grid-template-columns: repeat(auto-fit, minmax(230px, 280px));
+  justify-content: center;
+  gap: var(--gap-sm);
+}
+
+.ig-card {
+  /* button reset (cards can be <button> or <a>) */
+  appearance: none;
+  background: none;
+  border: 1px solid var(--border-subtle);
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
+
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  transition: border-color 0.45s var(--ease-out), transform 0.45s var(--ease-out), box-shadow 0.45s var(--ease-out);
+}
+
+.ig-card:hover,
+.ig-card:focus-visible {
+  border-color: var(--border-glow);
+  transform: translateY(-6px);
+  box-shadow: 0 14px 40px var(--card-shadow);
+}
+
+.ig-thumb {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.ig-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.7s var(--ease-out), filter 0.7s var(--ease-out);
+}
+
+.ig-card:hover .ig-thumb img { transform: scale(1.06); }
+
+/* live in-card embed preview — src assigned on scroll via IntersectionObserver */
+.ig-live {
+  position: absolute;
+  /* oversize + offset crops Instagram's header/footer chrome, leaving the media */
+  top: -48px;
+  left: 0;
+  width: 100%;
+  height: calc(100% + 96px);
+  border: 0;
+  pointer-events: none; /* clicks fall through to the card → lightbox */
+  background: var(--bg-surface);
+}
+
+.ig-live-veil {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+  pointer-events: none;
+}
+
+.ig-thumb-blank {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(208, 175, 90, 0.16), transparent 55%),
+    radial-gradient(ellipse at 75% 85%, rgba(180, 120, 130, 0.12), transparent 55%),
+    var(--bg-surface);
+}
+
+.ig-thumb-blank::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+  border: 1px solid var(--border-glow);
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at center, transparent 34%, var(--border-glow) 35%, var(--border-glow) 37%, transparent 38%);
+}
+
+.ig-kind {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: var(--gold-soft);
+  background: rgba(6, 5, 3, 0.55);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--border-subtle);
+  transition: background 0.4s var(--ease-out), color 0.4s var(--ease-out);
+}
+
+.ig-card:hover .ig-kind { background: rgba(6, 5, 3, 0.8); color: var(--gold); }
+
+.ig-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 2.2rem 0.9rem 0.8rem;
+  font-family: var(--font-editorial);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: #f4efe6;
+  background: linear-gradient(to top, rgba(6, 5, 3, 0.82), transparent);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.45s var(--ease-out), transform 0.45s var(--ease-out);
+}
+
+.ig-card:hover .ig-caption,
+.ig-card:focus-visible .ig-caption { opacity: 1; transform: translateY(0); }
+
+.ig-follow {
+  text-align: center;
+  margin-top: var(--gap-lg);
+}
+
+@media (max-width: 900px) {
+  .ig-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* — Instagram lightbox — */
+.ig-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s var(--ease-out), visibility 0.35s;
+}
+
+.ig-lightbox.is-open { opacity: 1; visibility: visible; }
+
+.ig-lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 3, 2, 0.86);
+  backdrop-filter: blur(8px);
+}
+
+.ig-lightbox-shell {
+  position: relative;
+  width: min(400px, 92vw);
+  height: min(86vh, 720px);
+  transform: scale(0.94);
+  transition: transform 0.35s var(--ease-out);
+}
+
+.ig-lightbox.is-open .ig-lightbox-shell { transform: scale(1); }
+
+.ig-lightbox-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ig-lightbox-frame iframe {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #fff;
+}
+
+.ig-lightbox-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 2px solid var(--border-subtle);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: ig-spin 0.9s linear infinite;
+}
+
+@keyframes ig-spin { to { transform: rotate(360deg); } }
+
+.ig-lightbox-close {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  z-index: 2;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--gold-soft);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glow);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: color 0.3s, transform 0.3s var(--ease-out);
+}
+
+.ig-lightbox-close:hover { color: var(--gold); transform: rotate(90deg); }
+
+/* ====================================================================
+   11d. ENQUIRY QUOTE POPUP
+   ==================================================================== */
+.enquiry-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  display: grid;
+  place-items: center;
+  padding: var(--gap-md);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.45s var(--ease-out), visibility 0.45s;
+}
+
+.enquiry-popup.is-open { opacity: 1; visibility: visible; }
+
+.enquiry-popup-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 3, 2, 0.8);
+  backdrop-filter: blur(6px);
+}
+
+.enquiry-popup-card {
+  position: relative;
+  max-width: 540px;
+  width: 100%;
+  padding: calc(var(--gap-lg) + 10px) var(--gap-lg) var(--gap-lg);
+  text-align: center;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-glow);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+  transform: translateY(24px) scale(0.96);
+  transition: transform 0.5s var(--ease-out);
+}
+
+.enquiry-popup.is-open .enquiry-popup-card { transform: translateY(0) scale(1); }
+
+/* inner hairline frame — quiet luxury detail */
+.enquiry-popup-card::before {
+  content: '';
+  position: absolute;
+  inset: 10px;
+  border: 1px solid var(--border-subtle);
+  pointer-events: none;
+}
+
+.enquiry-popup-ornament {
+  display: block;
+  width: 54px;
+  height: 1px;
+  margin: 0 auto var(--gap-sm);
+  background: var(--gold);
+  position: relative;
+}
+
+.enquiry-popup-ornament::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  background: var(--bg-secondary);
+  border: 1px solid var(--gold);
+}
+
+.enquiry-popup-eyebrow {
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: var(--gap-sm);
+}
+
+.enquiry-popup-quote {
+  font-family: var(--font-editorial);
+  font-style: italic;
+  font-size: clamp(1.25rem, 2.6vw, 1.6rem);
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--text-ink);
+  margin: 0 0 var(--gap-xs);
+}
+
+.enquiry-popup-author {
+  display: block;
+  font-family: var(--font-editorial);
+  font-style: normal;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  color: var(--gold-soft);
+  margin-bottom: var(--gap-sm);
+}
+
+.enquiry-popup-text {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  max-width: 40ch;
+  margin: 0 auto var(--gap-md);
+}
+
+.enquiry-popup-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-sm);
+  flex-wrap: wrap;
+}
+
+.enquiry-popup-later {
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.74rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: color 0.3s;
+}
+
+.enquiry-popup-later:hover { color: var(--gold); }
+
+.enquiry-popup-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 1;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  font-size: 1.35rem;
+  line-height: 1;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s, transform 0.3s var(--ease-out);
+}
+
+.enquiry-popup-close:hover { color: var(--gold); transform: rotate(90deg); }
+
+/* ====================================================================
    12. PORTFOLIO
    ==================================================================== */
 .ss-portfolio {
@@ -1825,6 +2192,14 @@ ul  { list-style: none; }
   top: -10%;
   left: 0;
   will-change: transform;
+}
+
+.ss-cta-banner .cta-media-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .cta-content {

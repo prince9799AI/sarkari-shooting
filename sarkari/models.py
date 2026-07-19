@@ -1,5 +1,8 @@
 from django.db import models
 
+# extensions treated as video wherever a media field accepts image OR video
+VIDEO_EXTENSIONS = (".mp4", ".webm", ".mov", ".m4v")
+
 
 class SiteSettings(models.Model):
     """Global site settings - logo, contact info, social links. Singleton model."""
@@ -26,8 +29,8 @@ class SiteSettings(models.Model):
 
 
 class HeroSlide(models.Model):
-    """Hero section slideshow slides."""
-    image = models.ImageField(upload_to="hero/", blank=True, null=True)
+    """Hero section slideshow slides. `image` accepts an image OR a video file."""
+    image = models.FileField(upload_to="hero/", blank=True, null=True)
     location = models.CharField(max_length=100)
     date = models.CharField(max_length=50)
     title = models.CharField(max_length=200)
@@ -37,6 +40,9 @@ class HeroSlide(models.Model):
 
     class Meta:
         ordering = ["order"]
+
+    def is_video(self):
+        return bool(self.image) and self.image.name.lower().endswith(VIDEO_EXTENSIONS)
 
     def __str__(self):
         return self.title
@@ -193,15 +199,19 @@ class Stat(models.Model):
 
 
 class CTABanner(models.Model):
-    """CTA banner section."""
-    image = models.ImageField(upload_to="cta/", blank=True, null=True)
+    """CTA banner section. `image` accepts an image OR a video file."""
+    image = models.FileField(upload_to="cta/", blank=True, null=True)
     heading = models.CharField(max_length=200)
     button_text = models.CharField(max_length=50, default="Book a Session")
+
     button_link = models.CharField(max_length=200, blank=True)
     order = models.PositiveIntegerField(default=0)
 
     class Meta:
         ordering = ["order"]
+
+    def is_video(self):
+        return bool(self.image) and self.image.name.lower().endswith(VIDEO_EXTENSIONS)
 
     def __str__(self):
         return self.heading
@@ -219,6 +229,44 @@ class SiteSection(models.Model):
 
     def __str__(self):
         return self.section_key
+
+
+class InstagramPost(models.Model):
+    """Instagram reels/posts showcased on the site.
+
+    Paste any public Instagram reel/post URL into `link`; the embed
+    preview is derived from the URL at render time (nothing stored).
+    """
+    image = models.ImageField(blank=True, null=True, upload_to="instagram/")
+    link = models.URLField(blank=True)
+    caption = models.CharField(max_length=200, blank=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order"]
+
+    def media_kind(self):
+        """reel / post / video / profile — derived from the pasted URL."""
+        link = self.link or ""
+        if "/reel/" in link or "/reels/" in link:
+            return "reel"
+        if "/p/" in link:
+            return "post"
+        if "/tv/" in link:
+            return "video"
+        return "profile"
+
+    def embed_url(self):
+        """Instagram's iframe embed endpoint for this reel/post ('' if not embeddable)."""
+        if self.media_kind() == "profile":
+            return ""
+        base = self.link.split("?")[0]
+        if not base.endswith("/"):
+            base += "/"
+        return base + "embed/"
+
+    def __str__(self):
+        return self.caption or self.link or f"Instagram post {self.pk}"
 
 
 class PricingPackage(models.Model):
