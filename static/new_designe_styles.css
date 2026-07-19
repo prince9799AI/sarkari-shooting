@@ -2717,12 +2717,21 @@ html:not([data-theme="dark"]) .channel-card {
   .splash-rings { width: 280px; height: 280px; }
 }
 
+@media (max-width: 768px) {
+  :root {
+    --gap-md:  1.5rem;
+    --gap-lg:  2.75rem;
+    --gap-xl:  4rem;
+    --gap-2xl: 5.5rem;
+  }
+}
+
 @media (max-width: 480px) {
   :root {
     --gap-md:  1.25rem;
-    --gap-lg:  2.5rem;
-    --gap-xl:  4rem;
-    --gap-2xl: 6rem;
+    --gap-lg:  2.25rem;
+    --gap-xl:  3.25rem;
+    --gap-2xl: 4.25rem;
   }
 
   .hero-text-block { bottom: 22%; }
@@ -3553,8 +3562,8 @@ html:not([data-theme="dark"]) .channel-card {
 .mega-footer {
   position: relative;
   overflow: hidden;
-  margin-top: var(--gap-2xl);
-  padding: calc(clamp(220px, 30vw, 420px) * 0.62 + 48px) var(--gap-md) 0;
+  margin-top: var(--gap-xl);
+  padding: clamp(150px, 17vw, 240px) var(--gap-md) 0;
   background: #050403;
   border-top: none;
 }
@@ -3585,7 +3594,7 @@ html:not([data-theme="dark"]) .channel-card {
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
-  height: clamp(220px, 30vw, 420px);
+  height: clamp(150px, 17vw, 240px);
   pointer-events: none;
 }
 
@@ -3606,7 +3615,7 @@ html:not([data-theme="dark"]) .channel-card {
 .mf-horizon::after {
   content: '';
   position: absolute;
-  top: 62%;
+  top: 52%;
   left: 50%;
   transform: translateX(-50%);
   width: 165%;
@@ -3615,10 +3624,10 @@ html:not([data-theme="dark"]) .channel-card {
   background: #060504;
   border-top: 2px solid rgba(248, 240, 220, 0.85);
   box-shadow:
-    0 -6px 22px rgba(244, 234, 210, 0.55),
-    0 -22px 70px rgba(230, 207, 142, 0.30),
-    0 -60px 160px rgba(208, 175, 90, 0.16),
-    inset 0 30px 60px rgba(244, 234, 210, 0.08);
+    0 -4px 16px rgba(244, 234, 210, 0.55),
+    0 -16px 48px rgba(230, 207, 142, 0.30),
+    0 -40px 110px rgba(208, 175, 90, 0.16),
+    inset 0 24px 48px rgba(244, 234, 210, 0.08);
   filter: blur(0.2px);
 }
 
@@ -3673,7 +3682,7 @@ html:not([data-theme="dark"]) .channel-card {
 /* giant wordmark — SVG stretches text truly edge-to-edge */
 .mf-wordmark {
   position: relative;
-  margin-top: clamp(3rem, 7vw, 6rem);
+  margin-top: clamp(1.8rem, 4vw, 3.2rem);
   user-select: none;
 }
 
@@ -3698,7 +3707,7 @@ html:not([data-theme="dark"]) .channel-card {
   gap: var(--gap-sm);
   flex-wrap: wrap;
   max-width: 1240px;
-  margin: clamp(1.5rem, 3vw, 2.5rem) auto 0;
+  margin: clamp(1rem, 2vw, 1.6rem) auto 0;
   padding: 1.1rem 0 1.4rem;
   border-top: 1px solid var(--border-subtle);
 }
